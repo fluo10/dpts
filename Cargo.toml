@@ -4,3 +4,8 @@ members = [
     "cli",
     "core",
 ]
+
+[workspace.dependencies]
+anyhow = "1.0.98"
+chrono = "0.4.40"
+thiserror = "2.0.12"
