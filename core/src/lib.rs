@@ -1,7 +1,6 @@
-pub mod label;
-pub mod record;
-pub use self::label::Label;
-pub use self::record::Record;
+pub mod data;
+pub use self::data::Label;
+pub use self::data::Record;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

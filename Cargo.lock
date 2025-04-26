@@ -23,6 +23,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "achievement-counter-server"
+version = "0.1.0"
+dependencies = [
+ "achievement-counter-core",
+ "anyhow",
+ "chrono",
+ "clap",
+ "thiserror",
+]
+
+[[package]]
 name = "android-tzdata"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
