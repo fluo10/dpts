@@ -1,10 +1,10 @@
-pub mod error;
 //mod label;
 mod record;
 
 //use label::LabelArgs;
-use error::Error;
 use record::{RecordArgs,RecordAddArgs};
+
+use dpts_core::error::Error;
 
 use clap::{Args, CommandFactory,  Parser, Subcommand};
 

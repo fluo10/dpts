@@ -1,4 +1,6 @@
 pub mod data;
+pub mod entity;
+pub mod error;
 pub use self::data::Label;
 pub use self::data::Record;
 
