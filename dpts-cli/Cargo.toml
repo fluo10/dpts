@@ -1,10 +1,12 @@
 [package]
-name = "achievement-counter-cli"
-version = "0.1.0"
-edition = "2024"
+name = "dpts-cli"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+repository.workspace = true
 
 [dependencies]
-achievement-counter-core = { path = "../core" }
+dpts-core = { path = "../dpts-core" }
 anyhow = {workspace = true}
 chrono = {workspace = true}
 clap = {version = "4.5.37", features=["derive"]}

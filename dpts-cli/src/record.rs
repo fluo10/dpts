@@ -1,4 +1,3 @@
-use achievement_counter_core::Record;
 use chrono::prelude::*;
 use clap::{Args, Subcommand};
 use crate::Error;
