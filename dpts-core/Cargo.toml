@@ -8,7 +8,7 @@ repository.workspace = true
 [dependencies]
 dpts-migration = { workspace = true }
 anyhow = "1.0"
-async-graphql = "7.0"
+async-graphql = {version = "7.0", features = ["chrono"]}
 axum = "0.8"
 chrono = {workspace = true}
 clap = {workspace = true}
@@ -25,5 +25,6 @@ features = [
     "debug-print",
     "runtime-tokio-native-tls",
     "sqlx-sqlite",
+    "with-chrono",
 ]
 default-features = false

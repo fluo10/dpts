@@ -65,7 +65,7 @@ impl MigrationTrait for Migration {
                 .col(pk_auto(RecordDetail::Id))
                 .col(integer(RecordDetail::RecordHeaderId))
                 .col(integer(RecordDetail::RecordTagId))
-                .col(string(RecordDetail::Count))
+                .col(integer(RecordDetail::Count))
                 .foreign_key(
                     ForeignKey::create()
                         .name("FK_RecordDetail_RecordHeader")
@@ -117,6 +117,10 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
+        manager.drop_index(Index::drop().name("IDX_User_LoginName").to_owned()).await?;
+        manager.drop_index(Index::drop().name("IDX_RecordHeader_RecordedAt").to_owned()).await?;
+        manager.drop_index(Index::drop().name("IDX_RecordTag_Name").to_owned()).await?;
+
 
         manager.drop_table(
             Table::drop().table(RecordDetail::Table).to_owned()

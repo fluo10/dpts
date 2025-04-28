@@ -1,4 +1,5 @@
 use async_graphql::*;
+use chrono::{DateTime, FixedOffset,};
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -11,6 +12,9 @@ pub struct Model {
     pub id: i32,
     #[sea_orm(unique, indexed)]
     pub login_name: String,
+    pub password_hash: String,
+    pub created_at: DateTimeWithTimeZone,
+    pub updated_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, DeriveRelation, EnumIter)]

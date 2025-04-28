@@ -13,6 +13,10 @@ pub struct Model {
     #[serde(skip_deserializing)]
     pub user_id: i32,
     pub comment: String,
+    pub created_at: DateTimeWithTimeZone,
+    pub updated_at: DateTimeWithTimeZone,
+    #[sea_orm(indexed)]
+    pub recorded_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, DeriveRelation, EnumIter)]
