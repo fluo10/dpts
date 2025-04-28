@@ -3,6 +3,7 @@ members = ["dpts-*"]
 
 [workspace.dependencies]
 dpts-core = {path = "dpts-core"}
+dpts-migration = {path = "dpts-migration"}
 chrono = "0.4"
 clap = "4.5"
 dotenv = "0.15.0"
