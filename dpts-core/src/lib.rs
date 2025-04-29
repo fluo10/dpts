@@ -1,3 +1,4 @@
+pub mod csv;
 pub mod data;
 pub mod entity;
 pub mod error;
