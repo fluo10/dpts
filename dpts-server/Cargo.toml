@@ -6,6 +6,6 @@ edition.workspace = true
 repository.workspace = true
 
 [dependencies]
-dpts-core = {workspace = true}
+dpts = {workspace = true}
 chrono = {workspace = true}
 clap = {workspace = true, features = ["derive"]}

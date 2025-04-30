@@ -1,6 +1,6 @@
 use chrono::prelude::*;
 use clap::{Args, Subcommand};
-use dpts_core::error::Error;
+use dpts::error::Error;
 use std::str::FromStr;
 
 #[derive(Args, Clone, Debug)]

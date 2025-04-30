@@ -4,7 +4,7 @@ mod record;
 //use label::LabelArgs;
 use record::{RecordArgs,RecordAddArgs};
 
-use dpts_core::error::Error;
+use dpts::error::Error;
 
 use clap::{Args, CommandFactory,  Parser, Subcommand};
 

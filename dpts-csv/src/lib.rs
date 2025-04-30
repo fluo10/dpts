@@ -8,7 +8,7 @@ pub use record::CsvRecord;
 pub use table::CsvTable;
 pub use writer::CsvWriter;
 
-use crate::error::Error;
+use dpts_error::Error;
 
 use chrono::{DateTime, NaiveDateTime};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};

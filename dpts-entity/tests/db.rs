@@ -2,7 +2,7 @@ use std::time::Duration;
 use chrono::{offset, FixedOffset, Local, TimeZone};
 use sea_orm::{entity::*, query::*, ConnectOptions, Database};
 use dpts_migration::{Migrator, MigratorTrait};
-use dpts_core::entity::*;
+use dpts_entity::*;
 
 #[tokio::test]
 async fn main() {

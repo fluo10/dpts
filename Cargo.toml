@@ -1,12 +1,29 @@
+[package]
+name = "dpts"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+dpts-csv = { workspace = true }
+dpts-entity = { workspace = true }
+dpts-error = { workspace = true }
+dpts-migration = { workspace = true }
+
 [workspace]
-members = ["dpts-*"]
+members = [".", "dpts-*"]
 
 [workspace.dependencies]
-dpts-core = {path = "dpts-core"}
+dpts = { path = "." }
+dpts-csv = { path = "dpts-csv" }
+dpts-entity = { path = "dpts-entity" }
+dpts-error = { path = "dpts-error" }
 dpts-migration = {path = "dpts-migration"}
 chrono = {version = "0.4", features = ["serde"]}
 clap = "4.5"
 dotenv = "0.15.0"
+serde = "1.0.219"
 
 [workspace.package]
 version = "0.1.0"

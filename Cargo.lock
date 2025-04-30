@@ -771,31 +771,57 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1aaf95b3e5c8f23aa320147307562d361db0ae0d51242340f558153b4eb2439b"
 
 [[package]]
+name = "dpts"
+version = "0.1.0"
+dependencies = [
+ "dpts-csv",
+ "dpts-entity",
+ "dpts-error",
+ "dpts-migration",
+]
+
+[[package]]
 name = "dpts-cli"
 version = "0.1.0"
 dependencies = [
  "chrono",
  "clap",
- "dpts-core",
+ "dpts",
 ]
 
 [[package]]
-name = "dpts-core"
+name = "dpts-csv"
 version = "0.1.0"
 dependencies = [
- "anyhow",
+ "chrono",
+ "csv",
+ "dpts-entity",
+ "dpts-error",
+ "serde",
+]
+
+[[package]]
+name = "dpts-entity"
+version = "0.1.0"
+dependencies = [
  "async-graphql",
  "axum",
  "chrono",
- "clap",
- "csv",
  "dotenv",
  "dpts-migration",
  "log",
  "sea-orm",
  "serde",
- "thiserror 2.0.12",
  "tokio",
+]
+
+[[package]]
+name = "dpts-error"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "thiserror 2.0.12",
 ]
 
 [[package]]
@@ -812,7 +838,7 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "clap",
- "dpts-core",
+ "dpts",
 ]
 
 [[package]]
