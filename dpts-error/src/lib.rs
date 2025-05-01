@@ -6,6 +6,8 @@ pub enum Error {
     ParseIntError(#[from] std::num::ParseIntError),
     #[error("IO Error")]
     IoError(#[from] std::io::Error),
+    #[error("Parse toml error")]
+    TomlDe(#[from] toml::de::Error),
 }
 
 impl Error {

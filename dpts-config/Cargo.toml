@@ -1,0 +1,18 @@
+[package]
+name = "dpts-config"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+default = ["client", "server"]
+client = []
+server = []
+
+[dependencies]
+dpts-entity.workspace = true
+dpts-error.workspace = true
+serde.workspace = true
+tokio.workspace = true
+toml.workspace = true

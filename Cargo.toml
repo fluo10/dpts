@@ -6,17 +6,19 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-dpts-csv = { workspace = true }
-dpts-entity = { workspace = true }
-dpts-error = { workspace = true }
-dpts-migration = { workspace = true }
-dpts-database = { workspace = true }
+dpts-config.workspace = true
+dpts-csv.workspace = true
+dpts-entity.workspace = true
+dpts-error.workspace = true
+dpts-migration.workspace = true
+dpts-database.workspace = true
 
 [workspace]
 members = [".", "dpts-*"]
 
 [workspace.dependencies]
 dpts = { path = "." }
+dpts-config = { path = "dpts-config" }
 dpts-csv = { path = "dpts-csv" }
 dpts-database = { path = "dpts-database" }
 dpts-entity = { path = "dpts-entity" }
@@ -26,6 +28,8 @@ chrono = {version = "0.4", features = ["serde"]}
 clap = "4.5"
 dotenv = "0.15.0"
 serde = { version = "1.0", features = ["derive"] }
+tokio = "1.44.2"
+toml = "0.8.22"
 
 [workspace.package]
 version = "0.1.0"

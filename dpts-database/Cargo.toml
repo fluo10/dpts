@@ -17,7 +17,7 @@ axum = "0.8"
 chrono = {workspace = true}
 dotenv = {workspace = true}
 log = "0.4.27"
-tokio = "1.44.2"
+tokio.workspace = true
 
 [dependencies.sea-orm]
 version = "1.1"
