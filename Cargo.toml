@@ -10,6 +10,7 @@ dpts-csv = { workspace = true }
 dpts-entity = { workspace = true }
 dpts-error = { workspace = true }
 dpts-migration = { workspace = true }
+dpts-database = { workspace = true }
 
 [workspace]
 members = [".", "dpts-*"]
@@ -17,13 +18,14 @@ members = [".", "dpts-*"]
 [workspace.dependencies]
 dpts = { path = "." }
 dpts-csv = { path = "dpts-csv" }
+dpts-database = { path = "dpts-database" }
 dpts-entity = { path = "dpts-entity" }
 dpts-error = { path = "dpts-error" }
 dpts-migration = {path = "dpts-migration"}
 chrono = {version = "0.4", features = ["serde"]}
 clap = "4.5"
 dotenv = "0.15.0"
-serde = "1.0.219"
+serde = { version = "1.0", features = ["derive"] }
 
 [workspace.package]
 version = "0.1.0"

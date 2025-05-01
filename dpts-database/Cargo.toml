@@ -1,18 +1,22 @@
 [package]
-name = "dpts-entity"
+name = "dpts-database"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[features]
+default = []
+test = []
+
 [dependencies]
+dpts-entity = { workspace = true }
 dpts-migration = { workspace = true }
 async-graphql = {version = "7.0", features = ["chrono"]}
 axum = "0.8"
 chrono = {workspace = true}
 dotenv = {workspace = true}
 log = "0.4.27"
-serde = { workspace = true }
 tokio = "1.44.2"
 
 [dependencies.sea-orm]
@@ -25,6 +29,3 @@ features = [
     "with-chrono",
 ]
 default-features = false
-
-[dev-dependencies]
-dpts-database = { workspace = true, features = ["test"] }

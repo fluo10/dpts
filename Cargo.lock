@@ -775,6 +775,7 @@ name = "dpts"
 version = "0.1.0"
 dependencies = [
  "dpts-csv",
+ "dpts-database",
  "dpts-entity",
  "dpts-error",
  "dpts-migration",
@@ -801,6 +802,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "dpts-database"
+version = "0.1.0"
+dependencies = [
+ "async-graphql",
+ "axum",
+ "chrono",
+ "dotenv",
+ "dpts-entity",
+ "dpts-migration",
+ "log",
+ "sea-orm",
+ "tokio",
+]
+
+[[package]]
 name = "dpts-entity"
 version = "0.1.0"
 dependencies = [
@@ -808,6 +824,7 @@ dependencies = [
  "axum",
  "chrono",
  "dotenv",
+ "dpts-database",
  "dpts-migration",
  "log",
  "sea-orm",
