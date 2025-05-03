@@ -9,10 +9,14 @@ repository.workspace = true
 default = ["client", "server"]
 client = []
 server = []
+test = []
 
 [dependencies]
+chrono-tz.workspace = true
 dpts-entity.workspace = true
 dpts-error.workspace = true
+iana-time-zone = "0.1.63"
 serde.workspace = true
+thiserror.workspace = true
 tokio.workspace = true
 toml.workspace = true

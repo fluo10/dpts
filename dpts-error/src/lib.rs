@@ -3,11 +3,14 @@ pub enum Error {
     #[error("Parser error")]
     Clap(#[from] clap::Error),
     #[error("Parse int error")]
-    ParseIntError(#[from] std::num::ParseIntError),
+    ParseInt(#[from] std::num::ParseIntError),
     #[error("IO Error")]
-    IoError(#[from] std::io::Error),
+    Io(#[from] std::io::Error),
     #[error("Parse toml error")]
     TomlDe(#[from] toml::de::Error),
+    #[error("Missing config value: ({0})")]
+    MissingConfig(String)
+
 }
 
 impl Error {

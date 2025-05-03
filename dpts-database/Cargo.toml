@@ -6,10 +6,13 @@ license.workspace = true
 repository.workspace = true
 
 [features]
-default = []
+default = ["server", "client"]
+client = []
+server = []
 test = []
 
 [dependencies]
+dpts-config.workspace = true
 dpts-entity = { workspace = true }
 dpts-migration = { workspace = true }
 async-graphql = {version = "7.0", features = ["chrono"]}
@@ -29,3 +32,6 @@ features = [
     "with-chrono",
 ]
 default-features = false
+
+[dev-dependencies]
+dpts-config = { workspace = true, features = ["test"] }

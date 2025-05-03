@@ -1,7 +1,7 @@
 use std::time::Duration;
 use sea_orm::{entity::*, query::*, ConnectOptions, Database, DatabaseConnection};
 use dpts_migration::{Migrator, MigratorTrait};
-
+use dpts_config::ServerConfig;
 
 use tokio::sync::OnceCell;
 
@@ -25,6 +25,27 @@ impl OnceDatabaseConnection {
         self.inner.get_or_init(f).await
     }
 
+    pub async fn get_or_init_with_server_config(&self, c: &ServerConfig) -> &DatabaseConnection {
+        self.get_or_init( || async {
+            let mut opt = ConnectOptions::new(&c.database_url);
+            opt.max_connections(100)
+                .min_connections(5)
+                .connect_timeout(Duration::from_secs(8))
+                .acquire_timeout(Duration::from_secs(8))
+                .idle_timeout(Duration::from_secs(8))
+                .max_lifetime(Duration::from_secs(8))
+                .sqlx_logging(true)
+                .sqlx_logging_level(log::LevelFilter::Info);
+                //.set_schema_search_path("my_schema"); // Setting default PostgreSQL schema
+            let db = Database::connect(opt).await.unwrap();
+            Migrator::fresh(&db).await.unwrap();
+            db
+        }).await
+    }
+    pub async fn get_or_init_with_static_server_config(&self) -> &DatabaseConnection {
+        self.get_or_init_with_server_config(dpts_config::SERVER_CONFIG.get().unwrap()).await
+    }
+
     #[cfg(test)]
     pub async fn init_test(&self)  {
         self.get_or_init( || async {
@@ -46,6 +67,7 @@ impl OnceDatabaseConnection {
     }
 
 }
+
 
 pub static DATABASE_CONNECTION: OnceDatabaseConnection = OnceDatabaseConnection::new();
 
