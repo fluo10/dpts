@@ -821,6 +821,7 @@ dependencies = [
  "dpts-entity",
  "dpts-error",
  "iana-time-zone",
+ "sea-orm",
  "serde",
  "thiserror 2.0.12",
  "tokio",

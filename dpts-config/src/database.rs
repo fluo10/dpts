@@ -1,5 +1,6 @@
 use std::time::Duration;
 
+use sea_orm::ConnectOptions;
 use serde::Deserialize;
 
 use crate::Error;
@@ -14,6 +15,33 @@ pub struct DatabaseConfig {
     pub idle_timeout: Option<Duration>,
     pub max_lifetime: Option<Duration>,
     pub sqlx_logging: bool,
+}
+
+impl Into<ConnectOptions> for &DatabaseConfig {
+    fn into(self) -> ConnectOptions {
+        let mut opt = ConnectOptions::new(&self.url);
+        if let Some(x) = self.max_connections {
+            opt.max_connections(x);
+        }
+        if let Some(x) = self.min_connections {
+            opt.min_connections(x);
+        }
+        if let Some(x) = self.connect_timeout {
+            opt.connect_timeout(x);
+        }
+        if let Some(x) = self.acquire_timeout {
+            opt.acquire_timeout(x);
+        }
+        if let Some(x) = self.idle_timeout {
+            opt.idle_timeout(x);
+        }
+        if let Some(x) = self.max_lifetime {
+            opt.max_lifetime(x);
+        }
+        opt.sqlx_logging(self.sqlx_logging);
+        
+        opt
+    }
 }
 
 impl TryFrom<PartialDatabaseConfig> for DatabaseConfig{
@@ -31,6 +59,7 @@ impl TryFrom<PartialDatabaseConfig> for DatabaseConfig{
         })
     }
 }
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 pub struct PartialDatabaseConfig {
     pub url: Option<String>,

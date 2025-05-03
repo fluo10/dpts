@@ -16,6 +16,7 @@ chrono-tz.workspace = true
 dpts-entity.workspace = true
 dpts-error.workspace = true
 iana-time-zone = "0.1.63"
+sea-orm.workspace = true
 serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
