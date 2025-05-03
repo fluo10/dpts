@@ -1,29 +1,18 @@
-mod local;
 mod remote;
 
-pub use local::{
-    ClientLocalStorageConfig,
-    PartialClientLocalStorageConfig,
-};
-
-pub use remote::{
-    ClientRemoteStorageConfig,
-    PartialClientRemoteStorageConfig,
-};
+pub use remote::ClientRemoteStorageConfig;
 
 use serde::{
     Deserialize,
     Serialize
 };
 
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum ClientStorageConfig {
-    Local(ClientLocalStorageConfig),
+    Local,
     Remote(ClientRemoteStorageConfig),
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum PartialClientStorageConfig {
-    Local(PartialClientLocalStorageConfig),
-    Remote(PartialClientRemoteStorageConfig),
-}
+
+
