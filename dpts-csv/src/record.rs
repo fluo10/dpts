@@ -1,7 +1,7 @@
 use chrono::{DateTime, NaiveDateTime};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use dpts_entity::RecordDetailModel;
-use dpts_error::Error;
+use crate::error::Error;
 
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct CsvRecord{

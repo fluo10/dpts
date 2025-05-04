@@ -1,3 +1,8 @@
+use dpts_server::Args;
+
+use clap::Parser;
+
 fn main() {
-    println!("Hello, world!");
+    let args = Args::parse();
+    println!("{:?}", args);
 }

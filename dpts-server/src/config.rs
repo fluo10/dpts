@@ -1,9 +1,7 @@
-use chrono_tz::{Tz, UTC};
-use crate::{
-    get_host_time_zone_or_utc,
-    DatabaseConfig,
-    PartialDatabaseConfig,
-    Error
+use crate::error::Error;
+
+use dpts_core::config::{
+    DatabaseConfig, GlobalConfig, PartialDatabaseConfig
 };
 use serde::Deserialize;
 use std::{
@@ -13,14 +11,37 @@ use std::{
 };
 use tokio::sync::OnceCell;
 
+#[derive(Clone, Debug, Deserialize, PartialEq)]
+pub struct Config {
+    global: GlobalConfig,
+    database: DatabaseConfig,
+    server: ServerConfig,
+}
+
+impl TryFrom<PartialConfig> for Config {
+    type Error = Error;
+    fn try_from(p: PartialConfig) -> Result<Config, Self::Error> {
+        Ok(Config {
+            global: p.global.ok_or(Error::MissingConfig("global".to_string()))?,
+            database: p.database.ok_or(Error::MissingConfig("global".to_string()))?,
+            server: p.server.ok_or(Error::MissingConfig("global".to_string()))?,
+        })
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, PartialEq)]
+pub struct PartialConfig {
+    global: Option<GlobalConfig>,
+    database: Option<DatabaseConfig>,
+    server: Option<ServerConfig>,
+}
+
 pub static SERVER_CONFIG: OnceServerConfig = OnceServerConfig::const_new();
 
 #[derive(Clone, Debug, Deserialize, PartialEq)]
 pub struct ServerConfig {
     pub listen_ips: Vec<IpAddr>,
     pub port: u16,
-    pub time_zone: Tz,
-    pub database: DatabaseConfig
 }
 
 impl ServerConfig {
@@ -33,8 +54,6 @@ impl TryFrom<PartialServerConfig> for ServerConfig {
         Ok(ServerConfig{
             listen_ips: p.listen_ips.ok_or(Error::MissingConfig("listen_ips".to_string()))?,
             port: p.port.ok_or(Error::MissingConfig("port".to_string()))?,
-            database: p.database.ok_or(Error::MissingConfig("database.*".to_string()))?.try_into()?,
-            time_zone: p.time_zone.ok_or(Error::MissingConfig("time_zone".to_string()))?,
         })
     }
 }
@@ -61,12 +80,13 @@ impl OnceServerConfig {
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(clap::Args)]
 
 pub struct PartialServerConfig {
+    #[arg(short, long,)]
     pub listen_ips: Option<Vec<IpAddr>>,
+    #[arg(short, long,)]
     pub port: Option<u16>,
-    pub database: Option<PartialDatabaseConfig>,
-    pub time_zone: Option<Tz>,
 }
 
 impl PartialServerConfig {
@@ -81,8 +101,6 @@ impl Default for PartialServerConfig {
         PartialServerConfig {
             listen_ips: Some(vec!["127.0.0.1".parse().unwrap(), "::1".parse().unwrap()]),
             port: Some(3000),
-            database: None,
-            time_zone: Some(get_host_time_zone_or_utc())
         }
     }
 }

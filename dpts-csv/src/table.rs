@@ -1,4 +1,4 @@
-use dpts_error::Error;
+use crate::error::Error;
 use super::CsvRecord;
 pub struct CsvTable{
     inner: Vec<CsvRecord>

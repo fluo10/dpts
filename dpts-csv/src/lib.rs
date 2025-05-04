@@ -1,14 +1,14 @@
+pub mod error;
 mod reader;
 mod record;
 mod table;
 mod writer;
 
+use error::Error;
 pub use reader::CsvReader;
 pub use record::CsvRecord;
 pub use table::CsvTable;
 pub use writer::CsvWriter;
-
-use dpts_error::Error;
 
 use chrono::{DateTime, NaiveDateTime};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};

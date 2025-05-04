@@ -1,7 +1,10 @@
+use crate::config::{
+    DATABASE_CONFIG,
+    DatabaseConfig
+};
 use std::time::Duration;
 use sea_orm::{entity::*, query::*, ConnectOptions, Database, DatabaseConnection};
 use dpts_migration::{Migrator, MigratorTrait};
-use dpts_config::ServerConfig;
 
 use tokio::sync::OnceCell;
 
@@ -25,15 +28,15 @@ impl OnceDatabaseConnection {
         self.inner.get_or_init(f).await
     }
 
-    pub async fn get_or_init_with_server_config(&self, c: &ServerConfig) -> &DatabaseConnection {
+    pub async fn get_or_init_with_server_config(&self, c: &DatabaseConfig) -> &DatabaseConnection {
         self.get_or_init( || async {
-            let db = Database::connect(&c.database).await.unwrap();
+            let db = Database::connect(c).await.unwrap();
             Migrator::fresh(&db).await.unwrap();
             db
         }).await
     }
     pub async fn get_or_init_with_static_server_config(&self) -> &DatabaseConnection {
-        self.get_or_init_with_server_config(dpts_config::SERVER_CONFIG.get().unwrap()).await
+        self.get_or_init_with_server_config(DATABASE_CONFIG.get().unwrap()).await
     }
 
     #[cfg(test)]

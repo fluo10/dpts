@@ -1,7 +1,10 @@
 use std::time::Duration;
 
+#[cfg(feature="clap")]
+use clap::Args;
 use sea_orm::ConnectOptions;
 use serde::Deserialize;
+use tokio::sync::OnceCell;
 
 use crate::Error;
 
@@ -61,14 +64,26 @@ impl TryFrom<PartialDatabaseConfig> for DatabaseConfig{
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(feature="clap", derive(Args))]
 pub struct PartialDatabaseConfig {
     pub url: Option<String>,
     pub max_connections: Option<u32>,
     pub min_connections: Option<u32>,
+    #[cfg_attr(feature="clap", arg(value_parser = parse_duration ))]
     pub connect_timeout: Option<Duration>,
+    #[cfg_attr(feature="clap", arg(value_parser = parse_duration ))]
     pub acquire_timeout: Option<Duration>,
+    #[cfg_attr(feature="clap", arg(value_parser = parse_duration ))]
     pub idle_timeout: Option<Duration>,
+    #[cfg_attr(feature="clap", arg(value_parser = parse_duration ))]
     pub max_lifetime: Option<Duration>,
     pub sqlx_logging: Option<bool>
 }
 
+#[cfg(feature="clap")]
+fn parse_duration(arg: &str) -> Result<std::time::Duration, Error> {
+    let seconds = arg.parse()?;
+    Ok(std::time::Duration::from_secs(seconds))
+}
+
+pub static DATABASE_CONFIG: OnceCell<DatabaseConfig> = OnceCell::const_new();

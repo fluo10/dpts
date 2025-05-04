@@ -25,6 +25,3 @@ features = [
     "with-chrono",
 ]
 default-features = false
-
-[dev-dependencies]
-dpts-database = { workspace = true, features = ["test"] }

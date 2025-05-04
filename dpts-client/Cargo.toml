@@ -1,0 +1,16 @@
+[package]
+name = "dpts-client"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = ["clap"]
+clap = ["dep:clap"]
+
+[dependencies]
+clap = { workspace = true, optional = true }
+dpts-core.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+toml.workspace = true
