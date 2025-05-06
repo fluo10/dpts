@@ -1,13 +1,13 @@
 use chrono_tz::Tz;
 #[cfg(feature="clap")]
 use clap::Args;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use tokio::sync::OnceCell;
 
 use crate::Error;
 
 
-#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct GlobalConfig {
     pub time_zone: Tz,
 }
@@ -21,7 +21,7 @@ impl TryFrom<PartialGlobalConfig> for GlobalConfig{
     }
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 #[cfg_attr(feature="clap", derive(Args))]
 pub struct PartialGlobalConfig {
     #[cfg_attr(feature="clap", arg(short, long))]

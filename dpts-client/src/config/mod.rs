@@ -1,6 +1,9 @@
 mod storage;
 
+pub use dpts_core::config::*;
 pub use storage::*;
+
+
 
 use crate::error::Error;
 use serde::{
@@ -12,84 +15,45 @@ use tokio::sync::OnceCell;
 
 pub static CLIENT_CONFIG: OnceCell<ClientConfig> = OnceCell::const_new();
 
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 
-
-pub struct ClientConfig {
-    pub storage: ClientStorageConfig,
-}
-
-impl TryFrom<&PartialClientConfig> for ClientConfig {
-    type Error = Error;
-    fn try_from(p: &PartialClientConfig) -> Result<ClientConfig, Self::Error> {
-        Ok(ClientConfig{
-            storage: p.clone().storage.ok_or(Error::MissingConfig("storage".to_string()))?,
-        })
-
-    }
+pub struct Config {
+    pub client: ClientConfig,
+    pub global: PartialGlobalConfig,
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
-pub struct PartialClientConfig {
-    pub storage: Option<ClientStorageConfig>,
+pub struct ClientConfig {
+    pub storage: ClientStorageConfig,
 }
-
-impl PartialClientConfig {
-
-}
-
-
-impl Default for PartialClientConfig {
-    fn default() -> Self {
-        PartialClientConfig {
-            storage: None
-        }
-    }
-}
-
 
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono_tz::UTC;
     use tokio::sync::OnceCell;
-    const EMPTY_CONFIG_TOML: &str = r#""#;
-    static EMPTY_CONFIG_STRUCT: OnceCell<PartialClientConfig> = OnceCell::const_new();
-    
-    async fn get_empty_config_struct() -> &'static PartialClientConfig {
-        EMPTY_CONFIG_STRUCT.get_or_init(|| async {
-            PartialClientConfig{
-                storage: None,
-            }
-        }).await
 
-    }
-
-    #[tokio::test]
-    async fn deserialize_empty_client_config() {
-        let config: PartialClientConfig = toml::from_str(EMPTY_CONFIG_TOML).unwrap();
-        assert_eq!(&config, get_empty_config_struct().await);
-    }
-
-    #[tokio::test]
-    async fn serialize_empty_client_config() {
-        assert_eq!(EMPTY_CONFIG_TOML, toml::to_string(get_empty_config_struct().await).unwrap());
-    }
-
-    const LOCAL_STORAGE_CONFIG_TOML: &str = r#"time_zone = "UTC"
+    const LOCAL_STORAGE_CONFIG_TOML: &str = r#"[client]
 storage = "local"
+
+[global]
 "#;
-    static LOCAL_STORAGE_CONFIG_STRUCT: OnceCell<PartialClientConfig> = OnceCell::const_new();
+    static LOCAL_STORAGE_CONFIG_STRUCT: OnceCell<Config> = OnceCell::const_new();
     
-    async fn get_local_storage_client_config_struct() -> &'static PartialClientConfig {
+    async fn get_local_storage_client_config_struct() -> &'static Config {
         LOCAL_STORAGE_CONFIG_STRUCT.get_or_init(|| async {
-            PartialClientConfig{
-                storage: Some(ClientStorageConfig::Local),  
+            Config{
+                client: ClientConfig{
+                    storage: ClientStorageConfig::Local,
+                },   
+                global: PartialGlobalConfig { time_zone: None },
             }
         }).await
     }
     #[tokio::test]
     async fn deserialize_local_storage_client_config() {
-        let config: PartialClientConfig = toml::from_str(LOCAL_STORAGE_CONFIG_TOML).unwrap();
+        let config: Config = toml::from_str(LOCAL_STORAGE_CONFIG_TOML).unwrap();
         assert_eq!(&config, get_local_storage_client_config_struct().await);
     }
 
@@ -98,27 +62,31 @@ storage = "local"
         assert_eq!(LOCAL_STORAGE_CONFIG_TOML, toml::to_string(get_local_storage_client_config_struct().await).unwrap());
     }
 
-    const REMOTE_STORAGE_CONFIG_TOML: &str = r#"time_zone = "UTC"
-
-[storage.remote]
+    const REMOTE_STORAGE_CONFIG_TOML: &str = r#"[client.storage.remote]
 endpoint = "https://example.com"
 access_key = "test"
+
+[global]
+time_zone = "UTC"
 "#;
-    static REMOTE_STORAGE_CONFIG_STRUCT: OnceCell<PartialClientConfig> = OnceCell::const_new();
+    static REMOTE_STORAGE_CONFIG_STRUCT: OnceCell<Config> = OnceCell::const_new();
     
-    async fn get_remote_storage_client_config_struct() -> &'static PartialClientConfig {
+    async fn get_remote_storage_client_config_struct() -> &'static Config {
         REMOTE_STORAGE_CONFIG_STRUCT.get_or_init(|| async {
-            PartialClientConfig{
-                storage: Some(ClientStorageConfig::Remote(ClientRemoteStorageConfig {
-                    endpoint: "https://example.com".to_string(),
-                    access_key: "test".to_string(),
-                })),  
+            Config{
+                client: ClientConfig {
+                    storage: ClientStorageConfig::Remote(ClientRemoteStorageConfig {
+                        endpoint: "https://example.com".to_string(),
+                        access_key: "test".to_string(),
+                    })
+                },
+                global: PartialGlobalConfig { time_zone: Some(UTC) }  
             }
         }).await
     }
     #[tokio::test]
     async fn deserialize_remote_storage_client_config() {
-        let config: PartialClientConfig = toml::from_str(REMOTE_STORAGE_CONFIG_TOML).unwrap();
+        let config: Config = toml::from_str(REMOTE_STORAGE_CONFIG_TOML).unwrap();
         assert_eq!(&config, get_remote_storage_client_config_struct().await);
     }
 

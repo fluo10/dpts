@@ -1,13 +1,15 @@
 //mod label;
 pub mod error;
+mod init;
 mod record;
+
 
 
 //use label::LabelArgs;
 use record::{RecordArgs,RecordAddArgs};
 
 use error::Error;
-
+use init::InitArgs;
 use clap::{Args, CommandFactory,  Parser, Subcommand};
 
 use std::ffi::OsString;
@@ -22,18 +24,18 @@ struct Cli {
 
 #[derive(Clone, Debug, Subcommand)]
 enum Command {
+    Init(InitArgs),
     Record(RecordArgs),
 }
 
-
-fn main() -> Result<(), Error> {
+#[tokio::main]
+async fn main() -> Result<(), Error> {
     let cli = Cli::parse();
     match cli.command {
         //Some(Commands::Add(x)) => x.run(),
+        Command::Init(x) => x.run(),
         //Some(Commands::Label(x)) => x.run(),
         Command::Record(x) => x.run(),
     
     }
-
-
 }

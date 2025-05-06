@@ -838,15 +838,19 @@ name = "dpts-cli"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "chrono-tz",
  "clap",
- "dpts-core",
+ "dpts-client",
  "thiserror 2.0.12",
+ "tokio",
+ "toml",
 ]
 
 [[package]]
 name = "dpts-client"
 version = "0.1.0"
 dependencies = [
+ "chrono-tz",
  "clap",
  "dpts-core",
  "serde",

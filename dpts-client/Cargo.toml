@@ -8,6 +8,7 @@ default = ["clap"]
 clap = ["dep:clap"]
 
 [dependencies]
+chrono-tz.workspace = true
 clap = { workspace = true, optional = true }
 dpts-core.workspace = true
 serde.workspace = true
