@@ -1,9 +1,11 @@
+use async_graphql::SimpleObject;
 use chrono::{DateTime, FixedOffset,};
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, SimpleObject, Deserialize)]
 #[sea_orm(table_name = "user")]
+#[graphql(concrete(name = "User", params()))]
 pub struct Model {
     #[sea_orm(primary_key)]
     #[serde(skip_deserializing)]
@@ -13,22 +15,6 @@ pub struct Model {
     pub password_hash: String,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
-}
-
-#[async_graphql::Object]
-impl Model {
-    pub async fn id(&self) -> i32 {
-        self.id
-    }
-    pub async fn login_name(&self) -> String {
-        self.login_name.clone()
-    }
-    pub async fn created_at(&self) -> DateTimeWithTimeZone {
-        self.created_at.clone()
-    }
-    pub async fn updated_at(&self) -> DateTimeWithTimeZone {
-        self.updated_at.clone()
-    }
 }
 
 #[derive(Copy, Clone, Debug, DeriveRelation, EnumIter)]
