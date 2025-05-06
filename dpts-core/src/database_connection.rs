@@ -72,7 +72,7 @@ mod tests {
     use chrono::{offset, FixedOffset, Local, TimeZone};
     use sea_orm::{entity::*, query::*, ConnectOptions, Database};
     use dpts_migration::{Migrator, MigratorTrait};
-    use dpts_entity::*;
+    use crate::entity::*;
 
     #[tokio::test]
     async fn check_database_connection() {

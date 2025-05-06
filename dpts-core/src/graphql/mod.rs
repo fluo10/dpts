@@ -1,6 +1,6 @@
+mod mutation;
 mod query;
-
-mod response;
-
-//pub use query::GraphqlQuery;
-//pub use response::GraphqlResponse;
+mod record_detail;
+mod record_header;
+mod record_tag;
+mod user;

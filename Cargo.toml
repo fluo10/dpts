@@ -2,13 +2,12 @@
 members = ["dpts-*"]
 
 [workspace.dependencies]
+async-graphql = { version = "7.0", features = ["chrono"] }
 dpts-cli.path = "dpts-cli"
 dpts-client.path = "dpts-client"
 dpts-core = { path = "dpts-core" }
-dpts-csv = { path = "dpts-csv" }
-dpts-entity = { path = "dpts-entity" }
 dpts-migration = {path = "dpts-migration"}
-dpts-server.path = "dpts-server"
+dpts-server = { path = "dpts-server" }
 chrono = {version = "0.4", features = ["serde"]}
 chrono-tz = {version = "0.10.3", features = ["serde"]}
 clap = {version = "4.5", features = ["derive"]}

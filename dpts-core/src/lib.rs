@@ -1,7 +1,9 @@
 pub mod config;
-mod database_connection;
+pub mod csv;
+pub mod database_connection;
+pub mod entity;
 pub mod error;
-mod graphql;
+pub mod graphql;
 
 pub use database_connection::*;
 pub use error::Error;
