@@ -9,14 +9,14 @@ use crate::Error;
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct GlobalConfig {
-    pub time_zone: Tz,
+    pub time_zone: Option<Tz>,
 }
 
 impl TryFrom<PartialGlobalConfig> for GlobalConfig{
     type Error = Error;
     fn try_from(p: PartialGlobalConfig) -> Result<GlobalConfig, Self::Error> {
         Ok(GlobalConfig{
-            time_zone: p.time_zone.ok_or(Error::MissingConfig("time_zone".to_string()))?,
+            time_zone: p.time_zone,
         })
     }
 }

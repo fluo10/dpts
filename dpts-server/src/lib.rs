@@ -12,7 +12,7 @@ use async_graphql_axum::{
 };
 use axum::{routing::get, Router};
 use crate::graphql::build_service;
-
+use dpts_core::entity as entity;
 
 
 pub fn build_app() -> Router {

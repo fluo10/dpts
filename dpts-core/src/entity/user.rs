@@ -2,6 +2,9 @@ use async_graphql::SimpleObject;
 use chrono::{DateTime, FixedOffset,};
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
+use crate::error::Error;
+
+use crate::DATABASE_CONNECTION;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, SimpleObject, Deserialize)]
 #[sea_orm(table_name = "user")]
@@ -15,6 +18,22 @@ pub struct Model {
     pub password_hash: String,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
+}
+
+impl Entity {
+    pub async fn find_by_name(user_name: &str) -> Result<Option<Model>, Error> {
+        Ok(Entity::find()
+            .filter(Column::LoginName.contains(user_name))
+            .one(DATABASE_CONNECTION.get().unwrap())
+            .await?
+        )
+    }
+    pub async fn find_all() -> Result<Vec<Model>, Error> {
+        Ok(Entity::find()
+            .all(DATABASE_CONNECTION.get().unwrap())
+            .await?
+        )
+    }
 }
 
 #[derive(Copy, Clone, Debug, DeriveRelation, EnumIter)]
@@ -36,5 +55,10 @@ impl Related<super::record_tag::Entity> for Model {
         Relation::RecordTag.def()
     }
 }
-
+impl ActiveModel {
+    pub async fn create_user(login_name: &str, password: &str) -> Result<Model, Error>{
+        todo!()
+    }
+}
 impl ActiveModelBehavior for ActiveModel {}
+

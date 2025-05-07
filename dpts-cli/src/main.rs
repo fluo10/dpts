@@ -1,8 +1,9 @@
 //mod label;
-pub mod error;
 mod init;
 mod record;
+mod user;
 
+pub use dpts_client::error;
 
 
 //use label::LabelArgs;
@@ -33,7 +34,7 @@ async fn main() -> Result<(), Error> {
     let cli = Cli::parse();
     match cli.command {
         //Some(Commands::Add(x)) => x.run(),
-        Command::Init(x) => x.run(),
+        Command::Init(x) => x.run().await,
         //Some(Commands::Label(x)) => x.run(),
         Command::Record(x) => x.run(),
     

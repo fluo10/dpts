@@ -10,6 +10,7 @@ clap = ["dep:clap"]
 [dependencies]
 chrono-tz.workspace = true
 clap = { workspace = true, optional = true }
+dirs.workspace = true
 dpts-core.workspace = true
 serde.workspace = true
 thiserror.workspace = true

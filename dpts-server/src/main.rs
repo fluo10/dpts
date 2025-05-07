@@ -1,9 +1,6 @@
 use async_graphql::{http::{playground_source, GraphQLPlaygroundConfig}, *};
 use async_graphql_axum::GraphQL;
-use dpts_core::graphql::{
-    Mutation,
-    Query,
-};
+
 use dpts_server::{build_app, Args};
 use axum::{response::{Html, IntoResponse}, routing::get, Router};
 use clap::Parser;
