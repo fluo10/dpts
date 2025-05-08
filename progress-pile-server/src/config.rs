@@ -1,6 +1,6 @@
 use crate::error::Error;
 
-use dpts_core::config::{
+use progress_pile_core::config::{
     DatabaseConfig, GlobalConfig, PartialDatabaseConfig
 };
 use serde::Deserialize;

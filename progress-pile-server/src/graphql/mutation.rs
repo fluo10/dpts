@@ -1,5 +1,5 @@
 use async_graphql::*;
-use dpts_core::entity::UserModel;
+use progress_pile_core::entity::UserModel;
 
 use crate::{auth::try_hash_password, entity::UserActiveModel};
 

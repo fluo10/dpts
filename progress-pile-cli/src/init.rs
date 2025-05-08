@@ -1,8 +1,8 @@
 use clap::{Args, Subcommand};
 use chrono_tz::Tz;
 use crate::error::Error;
-use dpts_client::auth::try_login;
-use dpts_client::config::{
+use progress_pile_client::auth::try_login;
+use progress_pile_client::config::{
     ClientConfig, ClientRemoteStorageConfig, ClientStorageConfig, Config, GlobalConfig, PartialGlobalConfig
 };
 

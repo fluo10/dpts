@@ -1,7 +1,7 @@
 mod mutation;
 mod query;
 
-pub use dpts_core::graphql::*;
+pub use progress_pile_core::graphql::*;
 
 pub use mutation::Mutation;
 pub use query::Query;

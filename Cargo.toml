@@ -1,18 +1,19 @@
 [workspace]
-members = ["dpts-*"]
+members = ["progress-pile-*"]
 
 [workspace.dependencies]
 async-graphql = { version = "7.0", features = ["chrono"] }
-dpts-cli.path = "dpts-cli"
-dpts-client.path = "dpts-client"
-dpts-core = { path = "dpts-core" }
-dpts-migration = {path = "dpts-migration"}
-dpts-server = { path = "dpts-server" }
 chrono = {version = "0.4", features = ["serde"]}
 chrono-tz = {version = "0.10.3", features = ["serde"]}
 clap = {version = "4.5", features = ["derive"]}
 dirs = "6.0.0"
 dotenv = "0.15.0"
+progress-pile-cli.path = "progress-pile-cli"
+progress-pile-client.path = "progress-pile-client"
+progress-pile-client-migration.path = "progress-pile-client-migration"
+progress-pile-core = { path = "progress-pile-core" }
+progress-pile-server.path = "progress-pile-server"
+progress-pile-server-migration.path = "progress-pile-server-migration"
 serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0.12"
 tokio = "1.44.2"
@@ -33,5 +34,5 @@ default-features = false
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
-repository = "https://github.com/fluo10/dpts"
+repository = "https://github.com/fluo10/progres-pile"
 

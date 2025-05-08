@@ -914,81 +914,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1aaf95b3e5c8f23aa320147307562d361db0ae0d51242340f558153b4eb2439b"
 
 [[package]]
-name = "dpts-cli"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "chrono-tz",
- "clap",
- "dpts-client",
- "thiserror 2.0.12",
- "tokio",
- "toml",
-]
-
-[[package]]
-name = "dpts-client"
-version = "0.1.0"
-dependencies = [
- "chrono-tz",
- "clap",
- "dirs",
- "dpts-core",
- "serde",
- "thiserror 2.0.12",
- "tokio",
- "toml",
-]
-
-[[package]]
-name = "dpts-core"
-version = "0.1.0"
-dependencies = [
- "async-graphql",
- "axum",
- "chrono",
- "chrono-tz",
- "clap",
- "csv",
- "cynic",
- "dotenv",
- "dpts-migration",
- "iana-time-zone",
- "log",
- "sea-orm",
- "serde",
- "thiserror 2.0.12",
- "tokio",
- "toml",
-]
-
-[[package]]
-name = "dpts-migration"
-version = "0.1.0"
-dependencies = [
- "async-std",
- "sea-orm-migration",
-]
-
-[[package]]
-name = "dpts-server"
-version = "0.1.0"
-dependencies = [
- "argon2",
- "async-graphql",
- "async-graphql-axum",
- "axum",
- "chrono",
- "clap",
- "dpts-core",
- "rand 0.9.1",
- "serde",
- "thiserror 2.0.12",
- "tokio",
- "toml",
-]
-
-[[package]]
 name = "either"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2313,6 +2238,89 @@ dependencies = [
  "syn 2.0.100",
  "version_check",
  "yansi",
+]
+
+[[package]]
+name = "progress-pile-cli"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "chrono-tz",
+ "clap",
+ "progress-pile-client",
+ "thiserror 2.0.12",
+ "tokio",
+ "toml",
+]
+
+[[package]]
+name = "progress-pile-client"
+version = "0.1.0"
+dependencies = [
+ "chrono-tz",
+ "clap",
+ "dirs",
+ "progress-pile-core",
+ "serde",
+ "thiserror 2.0.12",
+ "tokio",
+ "toml",
+]
+
+[[package]]
+name = "progress-pile-client-migration"
+version = "0.1.0"
+dependencies = [
+ "async-std",
+ "sea-orm-migration",
+]
+
+[[package]]
+name = "progress-pile-core"
+version = "0.1.0"
+dependencies = [
+ "async-graphql",
+ "axum",
+ "chrono",
+ "chrono-tz",
+ "clap",
+ "csv",
+ "cynic",
+ "dotenv",
+ "iana-time-zone",
+ "log",
+ "progress-pile-server-migration",
+ "sea-orm",
+ "serde",
+ "thiserror 2.0.12",
+ "tokio",
+ "toml",
+]
+
+[[package]]
+name = "progress-pile-server"
+version = "0.1.0"
+dependencies = [
+ "argon2",
+ "async-graphql",
+ "async-graphql-axum",
+ "axum",
+ "chrono",
+ "clap",
+ "progress-pile-core",
+ "rand 0.9.1",
+ "serde",
+ "thiserror 2.0.12",
+ "tokio",
+ "toml",
+]
+
+[[package]]
+name = "progress-pile-server-migration"
+version = "0.1.0"
+dependencies = [
+ "async-std",
+ "sea-orm-migration",
 ]
 
 [[package]]

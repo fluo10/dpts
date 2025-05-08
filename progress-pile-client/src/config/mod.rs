@@ -2,7 +2,7 @@ mod storage;
 
 use std::{fmt::{Display, Formatter}, path::{Path, PathBuf}, str::FromStr};
 
-pub use dpts_core::config::*;
+pub use progress_pile_core::config::*;
 pub use storage::*;
 
 use crate::error::Error;

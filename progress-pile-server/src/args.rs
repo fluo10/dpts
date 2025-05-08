@@ -1,6 +1,6 @@
 use crate::config::PartialServerConfig;
 use clap::Parser;
-use dpts_core::config::{
+use progress_pile_core::config::{
     PartialDatabaseConfig,
     PartialGlobalConfig,
 };

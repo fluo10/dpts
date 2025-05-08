@@ -1,6 +1,6 @@
 use clap::{Args, Subcommand};
 use crate::error::Error;
-use dpts_client::config::Config;
+use progress_pile_client::config::Config;
 
 
 #[derive(Args, Clone, Debug)]

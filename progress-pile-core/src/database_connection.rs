@@ -4,7 +4,7 @@ use crate::config::{
 };
 use std::time::Duration;
 use sea_orm::{entity::*, query::*, ConnectOptions, Database, DatabaseConnection};
-use dpts_migration::{Migrator, MigratorTrait};
+use progress_pile_server_migration::{Migrator, MigratorTrait};
 
 use tokio::sync::OnceCell;
 
@@ -71,7 +71,7 @@ mod tests {
     use std::time::Duration;
     use chrono::{offset, FixedOffset, Local, TimeZone};
     use sea_orm::{entity::*, query::*, ConnectOptions, Database};
-    use dpts_migration::{Migrator, MigratorTrait};
+    use progress_pile_server_migration::{Migrator, MigratorTrait};
     use crate::entity::*;
 
     #[tokio::test]

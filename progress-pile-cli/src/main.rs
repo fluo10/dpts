@@ -3,7 +3,7 @@ mod init;
 mod record;
 mod user;
 
-pub use dpts_client::error;
+pub use progress_pile_client::error;
 
 
 //use label::LabelArgs;

@@ -1,5 +1,5 @@
 [package]
-name = "dpts-server"
+name = "progress-pile-server"
 version.workspace = true
 license.workspace = true
 edition.workspace = true
@@ -10,7 +10,7 @@ argon2 = "0.5.3"
 async-graphql.workspace = true
 axum = "0.8.4"
 clap = {workspace = true, features = ["derive"]}
-dpts-core = {workspace = true}
+progress-pile-core = {workspace = true}
 chrono = {workspace = true}
 serde.workspace = true
 thiserror.workspace = true
