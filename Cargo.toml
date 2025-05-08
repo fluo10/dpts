@@ -10,10 +10,11 @@ dirs = "6.0.0"
 dotenv = "0.15.0"
 progress-pile-cli.path = "progress-pile-cli"
 progress-pile-client.path = "progress-pile-client"
-progress-pile-client-migration.path = "progress-pile-client-migration"
 progress-pile-core = { path = "progress-pile-core" }
+progress-pile-migration-client.path = "progress-pile-migration-client"
+progress-pile-migration-core.path = "progress-pile-migration-core"
+progress-pile-migration-server.path = "progress-pile-migration-server"
 progress-pile-server.path = "progress-pile-server"
-progress-pile-server-migration.path = "progress-pile-server-migration"
 serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0.12"
 tokio = "1.44.2"

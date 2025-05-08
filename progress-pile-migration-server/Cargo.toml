@@ -1,12 +1,12 @@
 [package]
-name = "progress-pile-server-migration"
+name = "progress-pile-migration-server"
 version = "0.1.0"
 edition = "2021"
 publish = false
 
 [dependencies]
 async-std = { version = "1", features = ["attributes", "tokio1"] }
-
+progress-pile-migration-core = {workspace = true, features = ["server"]}
 [dependencies.sea-orm-migration]
 version = "1.1.0"
 features = [
