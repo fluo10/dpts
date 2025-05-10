@@ -1,8 +1,10 @@
 use sea_orm_migration::{prelude::*, schema::*};
 
+#[cfg(feature="client")]
 #[derive(DeriveMigrationName)]
 pub struct ClientMigration;
 
+#[cfg(feature="client")]
 #[async_trait::async_trait]
 impl MigrationTrait for ClientMigration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -290,7 +292,6 @@ impl MigrationTableDefault for ProgressCategory {
         Table::create()
             .table(Self::Table)
             .if_not_exists()
-            .col(uuid(Self::Id))
             .col(string(Self::Name))
             .col(timestamp_with_time_zone(Self::CreatedAt))
             .col(timestamp_with_time_zone(Self::UpdatedAt))
@@ -326,7 +327,7 @@ impl MigrationTableDefault for ProgressCategory {
 impl MigrationTableClient for ProgressCategory {
     fn table_create_statement_client() -> TableCreateStatement{
         let mut tcs = Self::table_create_statement_default();
-        tcs.primary_key(Index::create().name(PK_PROGRESS_CATEGORY).col(Self::Id));
+        tcs.col(pk_uuid(Self::Id));
         tcs
     }
     fn index_create_statements_client() -> Vec<IndexCreateStatement> {
@@ -342,6 +343,8 @@ impl MigrationTableServer for ProgressCategory {
 
     fn table_create_statement_server() -> TableCreateStatement{
         let mut tcs = Self::table_create_statement_default();
+        tcs.col(uuid(Self::Id));
+
         tcs.col(integer(Self::UserId));
         tcs.foreign_key(ForeignKey::create().name(FK_PROGRESS_CATEGORY_USER).from(Self::Table, Self::UserId)
             .to(User::Table, User::Id));

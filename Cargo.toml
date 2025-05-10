@@ -17,6 +17,7 @@ serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0.12"
 tokio = "1.44.2"
 toml = "0.8.22"
+uuid = { version = "1.16.0", features = [ "serde", "v4" ] }
 
 [workspace.dependencies.sea-orm]
 version = "1.1"
@@ -26,6 +27,7 @@ features = [
     "runtime-tokio-native-tls",
     "sqlx-sqlite",
     "with-chrono",
+    "with-uuid",
 ]
 default-features = false
 

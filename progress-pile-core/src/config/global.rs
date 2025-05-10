@@ -4,7 +4,7 @@ use clap::Args;
 use serde::{Deserialize, Serialize};
 use tokio::sync::OnceCell;
 
-use crate::Error;
+use crate::error::Error;
 
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]

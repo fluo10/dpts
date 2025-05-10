@@ -6,7 +6,7 @@ use sea_orm::ConnectOptions;
 use serde::Deserialize;
 use tokio::sync::OnceCell;
 
-use crate::Error;
+use crate::error::Error;
 
 #[derive(Clone, Debug, Deserialize, PartialEq)]
 pub struct DatabaseConfig {
