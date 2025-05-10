@@ -1,8 +1,86 @@
 use sea_orm_migration::{prelude::*, schema::*};
 
-pub trait TableMigrator {
+#[derive(DeriveMigrationName)]
+pub struct ClientMigration;
 
-    #[cfg(feature="server")]
+#[async_trait::async_trait]
+impl MigrationTrait for ClientMigration {
+    async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        ProgressCategory::up_client(manager).await?;
+        ProgressEntry::up_client(manager).await?;
+        Ok(())
+    }
+
+    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        ProgressEntry::down_client(manager).await?;
+        ProgressCategory::down_client(manager).await?;
+        Ok(())
+    }
+}
+
+#[cfg(feature="server")]
+#[derive(DeriveMigrationName)]
+pub struct ServerMigration;
+
+#[cfg(feature="server")]
+
+#[async_trait::async_trait]
+impl MigrationTrait for ServerMigration {
+    async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        User::up_server(manager).await?;
+        AccessToken::up_server(manager).await?;
+        ProgressCategory::up_server(manager).await?;
+        ProgressEntry::up_server(manager).await?;
+        Ok(())
+    }
+
+    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        ProgressEntry::down_server(manager).await?;
+        ProgressCategory::down_server(manager).await?;
+        AccessToken::down_server(manager).await?;
+        User::down_server(manager).await
+    }
+}
+
+
+
+
+pub trait MigrationTableDefault {
+
+    fn table_create_statement_default() -> TableCreateStatement;
+    fn index_create_statements_default() -> Vec<IndexCreateStatement>;
+    fn table_drop_statement_default() -> TableDropStatement;
+
+}
+
+
+
+
+
+#[cfg(feature="client")]
+#[async_trait::async_trait]
+pub trait MigrationTableClient {
+    async fn up_client<'a>(manager: &'a SchemaManager<'a>) -> Result<(), DbErr> {
+        manager.create_table(Self::table_create_statement_client()).await?;
+        for statement in Self::index_create_statements_client().into_iter() {
+            manager.create_index(statement).await?
+        }
+        Ok(())
+    }
+    async fn down_client<'a>(manager: &'a SchemaManager<'a>) -> Result<(), DbErr> {
+        manager.drop_table(Self::table_drop_statement_client()).await?;
+        Ok(())
+    }
+    fn table_create_statement_client() -> TableCreateStatement;
+    fn index_create_statements_client() -> Vec<IndexCreateStatement>;
+    fn table_drop_statement_client() -> TableDropStatement;
+}
+
+
+#[cfg(feature="server")]
+#[async_trait::async_trait]
+pub trait MigrationTableServer {
+
     async fn up_server<'a>(manager: &'a SchemaManager<'a>) -> Result<(), DbErr> {
         manager.create_table(Self::table_create_statement_server()).await?;
         for statement in Self::index_create_statements_server().into_iter() {
@@ -11,60 +89,14 @@ pub trait TableMigrator {
         Ok(())
     }
 
-    #[cfg(feature="server")]
     async fn down_server<'a>(manager: &'a SchemaManager<'a>) -> Result<(), DbErr> {
         manager.drop_table(Self::table_drop_statement_server()).await?;
         Ok(())
     }
-    #[cfg(feature="client")]
-    async fn up_client<'a>(manager: &'a SchemaManager<'a>) -> Result<(), DbErr> {
-        manager.create_table(Self::table_create_statement_client()).await?;
-        for statement in Self::index_create_statements_client().into_iter() {
-            manager.create_index(statement).await?
-        }
-        Ok(())
-    }
-    #[cfg(feature="client")]
-    async fn down_client<'a>(manager: &'a SchemaManager<'a>) -> Result<(), DbErr> {
-        manager.drop_table(Self::table_drop_statement_client()).await?;
-        Ok(())
-    }
     
-    fn table_create_statement_default() -> TableCreateStatement;
-
-    #[cfg(feature="client")]
-    fn table_create_statement_client() -> TableCreateStatement {
-        Self::table_create_statement_default()
-    }
-    
-    #[cfg(feature="server")]
-    fn table_create_statement_server() -> TableCreateStatement {
-        Self::table_create_statement_default()
-    }
-
-    fn index_create_statements_default() -> Vec<IndexCreateStatement>;
-
-    #[cfg(feature="client")]
-    fn index_create_statements_client() -> Vec<IndexCreateStatement> {
-        Self::index_create_statements_default()
-    }
-    
-    #[cfg(feature="server")]
-    fn index_create_statements_server() -> Vec<IndexCreateStatement>{
-        Self::index_create_statements_default()
-    }
-
-    fn table_drop_statement_default() -> TableDropStatement;
-    
-    #[cfg(feature="client")]
-    fn table_drop_statement_client() -> TableDropStatement {
-        Self::table_drop_statement_default()
-    }
-
-    #[cfg(feature="server")]
-    fn table_drop_statement_server() -> TableDropStatement {
-        Self::table_drop_statement_default()
-    }
+    fn table_create_statement_server() -> TableCreateStatement;
+    fn index_create_statements_server() -> Vec<IndexCreateStatement>;
+    fn table_drop_statement_server() -> TableDropStatement;
 }
 
 #[cfg(feature="server")]
@@ -78,15 +110,20 @@ pub enum User {
     LoginName,
     PasswordHash,
 }
+
+#[cfg(feature="server")]
 static IDX_USER_LOGIN_NAME: &str = "idx_user_login_name";
+#[cfg(feature="server")]
 static IDX_USER_CREATED_AT: &str = "idx_user_created_at";
+#[cfg(feature="server")]
 static IDX_USER_UPDATED_AT: &str = "idx_user_updated_at";
+#[cfg(feature="server")]
 static IDX_USER_DELETED_AT: &str = "idx_user_deleted_at";
 
 #[cfg(feature="server")]
-impl TableMigrator for User {
+impl MigrationTableServer for User {
     
-    fn table_create_statement_default() -> TableCreateStatement{
+    fn table_create_statement_server() -> TableCreateStatement{
         Table::create()
         .table(Self::Table)
         .if_not_exists()
@@ -100,7 +137,7 @@ impl TableMigrator for User {
         .to_owned()
     }
 
-    fn index_create_statements_default() -> Vec<IndexCreateStatement> {
+    fn index_create_statements_server() -> Vec<IndexCreateStatement> {
         vec![
             Index::create().name(IDX_USER_LOGIN_NAME)
                 .table(Self::Table)
@@ -121,7 +158,7 @@ impl TableMigrator for User {
         ]
     }
 
-    fn table_drop_statement_default() -> TableDropStatement {
+    fn table_drop_statement_server() -> TableDropStatement {
         Table::drop().table(Self::Table).to_owned()
     }
 }
@@ -139,23 +176,32 @@ pub enum AccessToken{
     Note,
 }
 
+#[cfg(feature="server")]
 static IDX_ACCESS_TOKEN_TOKEN_VALUE: &str = "idx_access_token_token_value";
+#[cfg(feature="server")]
 static IDX_ACCESS_TOKEN_CREATED_AT: &str = "idx_access_token_created_at";
+#[cfg(feature="server")]
 static IDX_ACCESS_TOKEN_UPDATED_AT: &str = "idx_access_token_updated_at";
+#[cfg(feature="server")]
 static IDX_ACCESS_TOKEN_EXPIRED_AT: &str = "idx_access_token_expired_at";
+#[cfg(feature="server")]
 static IDX_ACCESS_TOKEN_USER_ID_CREATED_AT: &str = "idx_access_token_user_id_created_at";
+#[cfg(feature="server")]
 static IDX_ACCESS_TOKEN_USER_ID_UPDATED_AT: &str = "idx_access_token_user_id_updated_at";
+#[cfg(feature="server")]
 static IDX_ACCESS_TOKEN_USER_ID_EXPIRED_AT: &str = "idx_access_token_user_id_expired_at";
+#[cfg(feature="server")]
 static FK_ACCESS_TOKEN_USER: &str = "fk_access_token_user";
 
 #[cfg(feature="server")]
-impl TableMigrator for AccessToken {
+impl MigrationTableServer for AccessToken {
 
-    fn table_create_statement_default() -> TableCreateStatement {
+    fn table_create_statement_server() -> TableCreateStatement {
         Table::create()
             .table(Self::Table)
             .if_not_exists()
             .col(pk_auto(Self::Id))
+            .col(integer(Self::UserId))
             .col(timestamp_with_time_zone(Self::CreatedAt))
             .col(timestamp_with_time_zone(Self::UpdatedAt))
             .col(timestamp_with_time_zone_null(Self::ExpiredAt))
@@ -170,7 +216,7 @@ impl TableMigrator for AccessToken {
             )
             .to_owned()
     }
-    fn index_create_statements_default() -> Vec<IndexCreateStatement> {
+    fn index_create_statements_server() -> Vec<IndexCreateStatement> {
         vec![
             Index::create().name(IDX_ACCESS_TOKEN_CREATED_AT)
                 .table(Self::Table)
@@ -205,7 +251,7 @@ impl TableMigrator for AccessToken {
                 .to_owned(),            
         ]
     }
-    fn table_drop_statement_default() -> TableDropStatement {
+    fn table_drop_statement_server() -> TableDropStatement {
         Table::drop().table(Self::Table).to_owned()
     }
 }
@@ -226,14 +272,19 @@ static IDX_PROGRESS_CATEGORY_NAME: &str = "idx_progress_category_name";
 static IDX_PROGRESS_CATEGORY_CREATED_AT: &str = "idx_progress_category_created_at";
 static IDX_PROGRESS_CATEGORY_UPDATED_AT: &str = "idx_progress_category_updated_at";
 static IDX_PROGRESS_CATEGORY_DELETED_AT: &str = "idx_progress_category_deleted_at";
+#[cfg(feature="server")]
 static IDX_PROGRESS_CATEGORY_USER_ID_NAME: &str = "idx_progress_category_user_id_name";
+#[cfg(feature="server")]
 static IDX_PROGRESS_CATEGORY_USER_ID_CREATED_AT: &str = "idx_progress_category_user_id_created_at";
+#[cfg(feature="server")]
 static IDX_PROGRESS_CATEGORY_USER_ID_UPDATED_AT: &str = "idx_progress_category_user_id_updated_at";
+#[cfg(feature="server")]
 static IDX_PROGRESS_CATEGORY_USER_ID_DELETED_AT: &str = "idx_progress_category_user_id_deleted_at";
+#[cfg(feature="server")]
 static FK_PROGRESS_CATEGORY_USER: &str = "fk_progress_category_user";
 static PK_PROGRESS_CATEGORY: &str = "pk_progress_category";
 
-impl TableMigrator for ProgressCategory {
+impl MigrationTableDefault for ProgressCategory {
     
     fn table_create_statement_default() -> TableCreateStatement {
         Table::create()
@@ -246,24 +297,6 @@ impl TableMigrator for ProgressCategory {
             .col(timestamp_with_time_zone_null(Self::DeletedAt))
             .to_owned()
     }
-
-    #[cfg(feature="client")]
-    fn table_create_statement_client() -> TableCreateStatement{
-        let mut tcs = Self::table_create_statement_default();
-        tcs.primary_key(Index::create().name(PK_PROGRESS_CATEGORY).col(Self::Id));
-        tcs
-    }
-
-    #[cfg(feature="server")]
-    fn table_create_statement_server() -> TableCreateStatement{
-        let mut tcs = Self::table_create_statement_default();
-        tcs.col(integer(Self::UserId));
-        tcs.foreign_key(ForeignKey::create().name(FK_PROGRESS_CATEGORY_USER).from(Self::Table, Self::UserId)
-            .to(User::Table, User::Id));
-        tcs.primary_key(Index::create().name(PK_PROGRESS_CATEGORY).col(Self::UserId).col(Self::Id));
-        tcs
-    }
-    
     fn index_create_statements_default() -> Vec<IndexCreateStatement> {
         vec![
             Index::create().name(IDX_PROGRESS_CATEGORY_CREATED_AT)
@@ -284,7 +317,38 @@ impl TableMigrator for ProgressCategory {
                 .to_owned(),
         ]
     }
-    #[cfg(feature="server")]
+    fn table_drop_statement_default() -> TableDropStatement {
+        Table::drop().table(Self::Table).to_owned()
+    }
+}
+
+#[cfg(feature="client")]
+impl MigrationTableClient for ProgressCategory {
+    fn table_create_statement_client() -> TableCreateStatement{
+        let mut tcs = Self::table_create_statement_default();
+        tcs.primary_key(Index::create().name(PK_PROGRESS_CATEGORY).col(Self::Id));
+        tcs
+    }
+    fn index_create_statements_client() -> Vec<IndexCreateStatement> {
+        Self::index_create_statements_default()
+    }
+    fn table_drop_statement_client() -> TableDropStatement{
+        Self::table_drop_statement_default()
+    }
+}
+
+#[cfg(feature="server")]
+impl MigrationTableServer for ProgressCategory {
+
+    fn table_create_statement_server() -> TableCreateStatement{
+        let mut tcs = Self::table_create_statement_default();
+        tcs.col(integer(Self::UserId));
+        tcs.foreign_key(ForeignKey::create().name(FK_PROGRESS_CATEGORY_USER).from(Self::Table, Self::UserId)
+            .to(User::Table, User::Id));
+        tcs.primary_key(Index::create().name(PK_PROGRESS_CATEGORY).col(Self::UserId).col(Self::Id));
+        tcs
+    }
+    
     fn index_create_statements_server() -> Vec<IndexCreateStatement> {
         [Self::index_create_statements_default(), vec![
             Index::create().name(IDX_PROGRESS_CATEGORY_USER_ID_CREATED_AT)
@@ -309,10 +373,11 @@ impl TableMigrator for ProgressCategory {
                 .to_owned(),            
         ]].concat()
     }
-
-    fn table_drop_statement_default() -> TableDropStatement {
-        Table::drop().table(Self::Table).to_owned()
+    fn table_drop_statement_server() -> TableDropStatement {
+        Self::table_drop_statement_default()
     }
+
+
 }
 
 #[derive(DeriveIden)]
@@ -334,18 +399,20 @@ static IDX_PROGRESS_ENTITY_CREATED_AT: &str = "idx_progress_entity_created_at";
 static IDX_PROGRESS_ENTITY_UPDATED_AT: &str = "idx_progress_entity_updated_at";
 static IDX_PROGRESS_ENTITY_DELETED_AT: &str = "idx_progress_entity_deleted_at";
 static IDX_PROGRESS_ENTITY_PROGRESSED_AT: &str = "idx_progress_entity_progressed_at";
+#[cfg(feature="server")]
 static IDX_PROGRESS_ENTITY_USER_ID_CREATED_AT: &str = "idx_progress_entity_user_id_created_at";
+#[cfg(feature="server")]
 static IDX_PROGRESS_ENTITY_USER_ID_UPDATED_AT: &str = "idx_progress_entity_user_id_updated_at";
+#[cfg(feature="server")]
 static IDX_PROGRESS_ENTITY_USER_ID_DELETED_AT: &str = "idx_progress_entity_user_id_deleted_at";
+#[cfg(feature="server")]
 static IDX_PROGRESS_ENTITY_USER_ID_PROGRESSED_AT: &str = "idx_progress_entity_user_id_progressed_at";
 static FK_PROGRESS_ENTITY_PROGRESS_CATEGORY: &str = "fk_progress_entity_progress_category";
+#[cfg(feature="server")]
 static FK_PROGRESS_ENTITY_USER: &str = "fk_progress_entity_user";
 static PK_PROGRESS_ENTITY: &str = "pk_progress_entity";
 
-static PROGRESS_ENTRY_PROGRESS_ENTITY_FOREIGN_KEY_NAME: &str = "fk__progress_entry__progress__category";
-
-
-impl TableMigrator for ProgressEntry {
+impl MigrationTableDefault for ProgressEntry {
 
     fn table_create_statement_default() -> TableCreateStatement {
         Table::create()
@@ -368,25 +435,6 @@ impl TableMigrator for ProgressEntry {
             )
             .to_owned()
     }
-    #[cfg(feature="client")]
-    fn table_create_statement_client() -> TableCreateStatement{
-        let mut tcs: TableCreateStatement = Self::table_create_statement_default();
-        tcs.primary_key(Index::create().name(PK_PROGRESS_ENTITY).col(Self::Id));
-        tcs
-    }
-
-    #[cfg(feature="server")]
-    fn table_create_statement_server() -> TableCreateStatement{
-        let mut tcs: TableCreateStatement = Self::table_create_statement_default();
-        tcs.primary_key(Index::create().name(PK_PROGRESS_ENTITY).col(Self::UserId).col(Self::Id));
-        tcs.foreign_key(ForeignKey::create()
-            .name(FK_PROGRESS_ENTITY_USER)
-            .from(Self::Table, Self::UserId)
-            .to(User::Table, User::Id)
-        );
-        tcs
-
-    }
 
     fn index_create_statements_default() -> Vec<IndexCreateStatement> {
         vec![
@@ -408,8 +456,44 @@ impl TableMigrator for ProgressEntry {
                 .to_owned(),
         ]
     }
+    
+    fn table_drop_statement_default() -> TableDropStatement {
+        Table::drop().table(Self::Table).to_owned()
+    }
+}
+#[cfg(feature="client")]
+impl MigrationTableClient for ProgressEntry {
 
-    #[cfg(feature="server")]
+    fn table_create_statement_client() -> TableCreateStatement{
+        let mut tcs: TableCreateStatement = Self::table_create_statement_default();
+        tcs.primary_key(Index::create().name(PK_PROGRESS_ENTITY).col(Self::Id));
+        tcs
+    }
+    fn index_create_statements_client() -> Vec<IndexCreateStatement> {
+        Self::index_create_statements_default()
+    }
+    fn table_drop_statement_client() -> TableDropStatement {
+        Self::table_drop_statement_default()
+    }
+}
+
+#[cfg(feature = "server")]
+impl MigrationTableServer for ProgressEntry {
+
+    fn table_create_statement_server() -> TableCreateStatement{
+        let mut tcs: TableCreateStatement = Self::table_create_statement_default();
+        tcs.col(integer(Self::UserId));
+        tcs.foreign_key(ForeignKey::create()
+            .name(FK_PROGRESS_ENTITY_USER)
+            .from(Self::Table, Self::UserId)
+            .to(User::Table, User::Id)
+        );
+        tcs.primary_key(Index::create().name(PK_PROGRESS_ENTITY).col(Self::UserId).col(Self::Id));
+
+        tcs
+
+    }
+
     fn index_create_statements_server() -> Vec<IndexCreateStatement> {
         let mut default = Self::index_create_statements_default();
         default.append(&mut vec![
@@ -436,7 +520,10 @@ impl TableMigrator for ProgressEntry {
         ]);
         default
     }
-    fn table_drop_statement_default() -> TableDropStatement {
-        Table::drop().table(Self::Table).to_owned()
+    
+    fn table_drop_statement_server() -> TableDropStatement {
+        Self::table_drop_statement_default()
     }
+
+
 }

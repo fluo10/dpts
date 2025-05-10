@@ -1,16 +1,20 @@
 [package]
-name = "progress-pile-migration-server"
+name = "progress-pile-migration"
 version = "0.1.0"
 edition = "2021"
 publish = false
 
+[features]
+default = ["client", "server"]
+client = []
+server = ["sea-orm-migration/sqlx-postgres"]
+
 [dependencies]
 async-std = { version = "1", features = ["attributes", "tokio1"] }
-progress-pile-migration-core = {workspace = true, features = ["server"]}
+
 [dependencies.sea-orm-migration]
 version = "1.1.0"
 features = [
   "runtime-tokio-rustls",
-  "sqlx-postgres",
   "sqlx-sqlite",
 ]

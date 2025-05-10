@@ -2281,7 +2281,6 @@ dependencies = [
  "dotenv",
  "iana-time-zone",
  "log",
- "progress-pile-migration-server",
  "sea-orm",
  "serde",
  "thiserror 2.0.12",
@@ -2290,28 +2289,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "progress-pile-migration-client"
+name = "progress-pile-migration"
 version = "0.1.0"
 dependencies = [
  "async-std",
- "progress-pile-migration-core",
- "sea-orm-migration",
-]
-
-[[package]]
-name = "progress-pile-migration-core"
-version = "0.1.0"
-dependencies = [
- "async-std",
- "sea-orm-migration",
-]
-
-[[package]]
-name = "progress-pile-migration-server"
-version = "0.1.0"
-dependencies = [
- "async-std",
- "progress-pile-migration-core",
  "sea-orm-migration",
 ]
 

@@ -11,9 +11,7 @@ dotenv = "0.15.0"
 progress-pile-cli.path = "progress-pile-cli"
 progress-pile-client.path = "progress-pile-client"
 progress-pile-core = { path = "progress-pile-core" }
-progress-pile-migration-client.path = "progress-pile-migration-client"
-progress-pile-migration-core.path = "progress-pile-migration-core"
-progress-pile-migration-server.path = "progress-pile-migration-server"
+progress-pile-migration = { path = "progress-pile-migration", default-features = false }
 progress-pile-server.path = "progress-pile-server"
 serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0.12"
@@ -30,6 +28,13 @@ features = [
     "with-chrono",
 ]
 default-features = false
+
+[workspace.dependencies.sea-orm-migration]
+version = "1.1.0"
+features = [
+  "runtime-tokio-rustls",
+  "sqlx-sqlite",
+]
 
 [workspace.package]
 version = "0.1.0"
