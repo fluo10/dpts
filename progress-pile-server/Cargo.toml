@@ -12,6 +12,7 @@ axum = "0.8.4"
 clap = {workspace = true, features = ["derive"]}
 progress-pile-core = {workspace = true}
 chrono = {workspace = true}
+sea-orm = { workspace = true, features = ["sqlx-postgres"] }
 serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true

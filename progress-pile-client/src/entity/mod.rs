@@ -20,19 +20,23 @@ mod tests {
     use super::*;
 
     use chrono::Local;
-    use sea_orm::entity::*;
+    use progress_pile_core::global::GlobalDatabase;
+    use sea_orm::{entity::*, DatabaseConnection};
     use progress_pile_migration::{ClientMigrator, MigratorTrait};
     use uuid::Uuid;
-    use crate::database_connection::DATABASE_CONNECTION;
+    use crate::error::Error;
+
+    async fn get_or_try_init_test_database() -> Result<&'static DatabaseConnection, Error> {
+        Ok(GlobalDatabase::get_or_try_init("sqlite::memory:", ClientMigrator).await?)
+
+    }
+
 
 
     #[tokio::test]
     async fn check_insert_entity() {
-        let db = DATABASE_CONNECTION.get_or_init("sqlite::memory:").await;
-        ClientMigrator::up(db, None).await.unwrap();
-        let local_date_time = Local::now();
-        let offset_date_time = local_date_time.with_timezone(local_date_time.offset());
-
+        let db = get_or_try_init_test_database().await.unwrap();
+        
         let category = ProgressCategoryActiveModel{
             name: Set("test_category".to_owned()),
             ..ProgressCategoryActiveModel::new()
@@ -42,8 +46,10 @@ mod tests {
             progress_category_id: Set(category.id),
             ..ProgressEntryActiveModel::new()
         }.insert(db).await.unwrap();
-
-        ClientMigrator::reset(db).await.unwrap();
-        //db.clone().close().await.unwrap();
+    }
+    #[tokio::test]
+    async fn connect_database () {
+        let db = get_or_try_init_test_database().await.unwrap();
+        assert!(db.ping().await.is_ok());
     }
 }

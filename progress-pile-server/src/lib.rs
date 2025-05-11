@@ -1,6 +1,7 @@
 mod args;
 mod auth;
 mod config;
+pub mod entity;
 pub mod error;
 pub mod graphql;
 
