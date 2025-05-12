@@ -2314,12 +2314,15 @@ dependencies = [
  "chrono",
  "clap",
  "progress-pile-core",
+ "progress-pile-migration",
  "rand 0.9.1",
  "sea-orm",
  "serde",
+ "tempfile",
  "thiserror 2.0.12",
  "tokio",
  "toml",
+ "uuid",
 ]
 
 [[package]]

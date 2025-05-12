@@ -2,8 +2,9 @@ mod args;
 mod auth;
 mod config;
 pub mod entity;
-pub mod error;
+pub mod global;
 pub mod graphql;
+pub use progress_pile_core::error;
 
 pub use args::Args;
 use async_graphql::{EmptySubscription, Schema};
@@ -13,7 +14,6 @@ use async_graphql_axum::{
 };
 use axum::{routing::get, Router};
 use crate::graphql::build_service;
-use progress_pile_core::entity as entity;
 
 
 pub fn build_app() -> Router {

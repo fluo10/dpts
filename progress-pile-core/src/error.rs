@@ -4,6 +4,8 @@ pub enum Error {
     Io(#[from] std::io::Error),
     #[error("Parse int error")]
     ParseInt(#[from] std::num::ParseIntError),
+    #[error("Password hash error")]
+    PasswordHash(String),
     #[error("Deserialize toml error")]
     TomlDe(#[from] toml::de::Error),
     #[error("Serialize toml error")]

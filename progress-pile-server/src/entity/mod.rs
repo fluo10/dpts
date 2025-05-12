@@ -45,68 +45,48 @@ mod tests {
     use std::time::Duration;
     use chrono::{offset, FixedOffset, Local, TimeZone};
     use sea_orm::{entity::*, query::*, ConnectOptions, Database};
-    use progress_pile_migration_server::{Migrator, MigratorTrait};
-    use crate::entity::*;
+    use progress_pile_migration::{ServerMigrator, MigratorTrait};
+    use crate::{entity::*, global::GLOBAL};
 
     #[tokio::test]
     async fn check_database_connection() {
-        DATABASE_CONNECTION.init_test().await;
-        let db = DATABASE_CONNECTION.get().unwrap();
+        
+        let db = GLOBAL.get_or_init_temporary_database().await;
         assert!(db.ping().await.is_ok());
     }
     #[tokio::test]
     async fn check_insert_entity() {
-        DATABASE_CONNECTION.init_test().await;
-        let db = DATABASE_CONNECTION.get().unwrap();
+        let db = GLOBAL.get_or_init_temporary_database().await;
         
-
-        let local_date_time = Local::now();
-        let offset_date_time = local_date_time.with_timezone(local_date_time.offset());
+        let timestamp = Local::now().fixed_offset();
 
         let user = UserActiveModel{
             login_name: Set("admin".to_owned()),
             password_hash: Set("admin".to_owned()),
-            created_at: Set(offset_date_time),
-            updated_at: Set(offset_date_time),
-            ..Default::default()
-        }.insert(db)
-        .await.unwrap();
+            created_at: Set(timestamp),
+            updated_at: Set(timestamp),
+            ..UserActiveModel::new()
+        }.insert(db).await.unwrap();
 
 
-        let record_tag = RecordTagActiveModel{
+        let access_token = AccessTokenActiveModel{
             user_id: Set(user.id),
-            name: Set("test".to_owned()),
             ..Default::default()
-        }.insert(db)
-        .await.unwrap();
+        }.insert(db).await.unwrap();
 
-        let record_header = RecordHeaderActiveModel{
+        let progress_category = ProgressCategoryActiveModel{
             user_id: Set(user.id),
-            created_at: Set(offset_date_time),
-            updated_at: Set(offset_date_time),
-            recorded_at: Set(offset_date_time),
-            comment: Set("".to_owned()),
+            name: Set("test_category".to_string()),
             ..Default::default()
         }.insert(db)
         .await.unwrap();
 
-        RecordDetailActiveModel {
-            record_header_id: Set(record_header.id),
-            record_tag_id: Set(record_tag.id),
-            count: Set(1),
-            ..Default::default()
-        }.insert(db)
-        .await.unwrap();
-        RecordDetailActiveModel {
-            record_header_id: Set(record_header.id),
-            record_tag_id: Set(record_tag.id),
-            count: Set(2),
+        ProgressEntryActiveModel {
+            user_id: Set(user.id),
+            progress_category_id: Set(progress_category.id),
             ..Default::default()
         }.insert(db)
         .await.unwrap();
 
-
-        Migrator::reset(db).await.unwrap();
-        db.clone().close().await.unwrap();
     }
 }

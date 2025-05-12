@@ -11,11 +11,16 @@ async-graphql.workspace = true
 axum = "0.8.4"
 clap = {workspace = true, features = ["derive"]}
 progress-pile-core = {workspace = true}
+progress-pile-migration = { workspace = true, features = ["server"] }
 chrono = {workspace = true}
 sea-orm = { workspace = true, features = ["sqlx-postgres"] }
 serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 toml.workspace = true
+uuid.workspace = true
 rand = "0.9.1"
 async-graphql-axum = "7.0.16"
+
+[dev-dependencies]
+tempfile.workspace = true

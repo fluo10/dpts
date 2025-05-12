@@ -14,6 +14,7 @@ progress-pile-core = { path = "progress-pile-core" }
 progress-pile-migration = { path = "progress-pile-migration", default-features = false }
 progress-pile-server.path = "progress-pile-server"
 serde = { version = "1.0", features = ["derive"] }
+tempfile = "3.20.0"
 thiserror = "2.0.12"
 tokio = "1.44.2"
 toml = "0.8.22"
