@@ -4,31 +4,20 @@ use crate::error::Error;
 use tokio::sync::OnceCell;
 use progress_pile_core::global::GlobalDatabase;
 
+use super::Global;
 
-pub static GLOBAL_DATABASE: OnceGlobalDatabase = OnceGlobalDatabase{
-    inner: OnceCell::const_new(),
-};
-pub struct OnceGlobalDatabase {
-    inner: OnceCell<DatabaseConnection>,
-}
-
-impl OnceGlobalDatabase {
-
-}
-
-
-impl GlobalDatabase for OnceGlobalDatabase {
-    fn get(&self) -> Option<& DatabaseConnection> {
-        self.inner.get()
+impl GlobalDatabase for Global {
+    fn get_database(&self) -> Option<&DatabaseConnection> {
+        self.database.get()
     }
-    async fn get_or_try_init(&self) -> Result<&DatabaseConnection, Error> {
+    async fn get_or_try_init_database(&self) -> Result<&DatabaseConnection, Error> {
         todo!()
     }
     
-    async fn get_or_try_init_with_connect_options<T>(&self, options: T) -> Result<&DatabaseConnection, Error> where
+    async fn get_or_try_init_database_with_connect_options<T>(&self, options: T) -> Result<&DatabaseConnection, Error> where
     T: Into<ConnectOptions>,
     {
-        Ok(self.inner.get_or_try_init(|| async {
+        Ok(self.database.get_or_try_init(|| async {
             let db = Database::connect(options).await?;
             ClientMigrator::up(&db, None).await?;
             Ok::<DatabaseConnection, Error>(db)
@@ -40,7 +29,8 @@ impl GlobalDatabase for OnceGlobalDatabase {
 pub mod tests {
     use std::sync::LazyLock;
 
-    use tokio::sync::OnceCell;
+    use crate::global::GLOBAL;
+
     use super::*;
 
     pub static TEST_DATABASE_URL: LazyLock<String> = LazyLock::new(|| {
@@ -51,16 +41,16 @@ pub mod tests {
         url
     });
     
-    impl OnceGlobalDatabase {
-        pub async fn get_or_init_temp(&self) -> &DatabaseConnection {
+    impl Global {
+        pub async fn get_or_init_temporary_database(&self) -> &DatabaseConnection {
 
-            self.get_or_try_init_with_connect_options(&*TEST_DATABASE_URL).await.unwrap()
+            self.get_or_try_init_database_with_connect_options(&*TEST_DATABASE_URL).await.unwrap()
         }
     }
 
     #[tokio::test]
     async fn connect_database () {
-        let db = GLOBAL_DATABASE.get_or_init_temp().await;
+        let db = GLOBAL.get_or_init_temporary_database().await;
         assert!(db.ping().await.is_ok());
     }
 

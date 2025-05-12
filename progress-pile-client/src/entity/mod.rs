@@ -27,14 +27,11 @@ mod tests {
     use progress_pile_migration::{ClientMigrator, MigratorTrait};
     use uuid::Uuid;
     use crate::error::Error;
-    use crate::global::database::{
-        GLOBAL_DATABASE,
-        tests::*
-    };
+    use crate::global::GLOBAL;
 
      #[tokio::test]
     async fn check_insert_entity() {
-        let db = GLOBAL_DATABASE.get_or_init_temp().await;
+        let db = GLOBAL.get_or_init_temporary_database().await;
         
         let category = ProgressCategoryActiveModel{
             name: Set("test_category".to_owned()),
