@@ -8,7 +8,7 @@ use sea_orm::entity::{
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize, SimpleObject)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel,)]
 #[sea_orm(table_name = "access_token")]
 pub struct Model {
     #[sea_orm(primary_key)]

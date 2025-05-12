@@ -4,12 +4,10 @@ use sea_orm::{entity::prelude::*, ActiveValue::Set};
 use serde::{Deserialize, Serialize};
 use crate::error::Error;
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, SimpleObject, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel,)]
 #[sea_orm(table_name = "user")]
-#[graphql(concrete(name = "User", params()))]
 pub struct Model {
     #[sea_orm(primary_key)]
-    #[serde(skip_deserializing)]
     pub id: i32,
     #[sea_orm(unique, indexed)]
     pub login_name: String,

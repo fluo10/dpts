@@ -13,10 +13,10 @@ pub struct Query;
 
 #[Object]
 impl Query {
-    pub async fn user(&self, user_name: String) -> Result<Option<UserModel>> {
-        Ok(UserEntity::find_by_name(&user_name).await?)
+    pub async fn user(&self, user_name: String) -> Result<Option<String>> {
+        todo!()
     }
-    pub async fn users(&self) -> Result<Vec<UserModel>> {
-        Ok(UserEntity::find_all().await?)
+    pub async fn users(&self) -> Result<Vec<String>> {
+        todo!()
     }
 }
