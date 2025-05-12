@@ -17,25 +17,24 @@ pub use progress_entry::{
 
 #[cfg(test)]
 mod tests {
+    use std::time::Duration;
+
     use super::*;
 
     use chrono::Local;
     use progress_pile_core::global::GlobalDatabase;
-    use sea_orm::{entity::*, DatabaseConnection};
+    use sea_orm::{entity::*, ConnectOptions, Database, DatabaseConnection};
     use progress_pile_migration::{ClientMigrator, MigratorTrait};
     use uuid::Uuid;
     use crate::error::Error;
+    use crate::global::database::{
+        GLOBAL_DATABASE,
+        tests::*
+    };
 
-    async fn get_or_try_init_test_database() -> Result<&'static DatabaseConnection, Error> {
-        Ok(GlobalDatabase::get_or_try_init("sqlite::memory:", ClientMigrator).await?)
-
-    }
-
-
-
-    #[tokio::test]
+     #[tokio::test]
     async fn check_insert_entity() {
-        let db = get_or_try_init_test_database().await.unwrap();
+        let db = GLOBAL_DATABASE.get_or_init_temp().await;
         
         let category = ProgressCategoryActiveModel{
             name: Set("test_category".to_owned()),
@@ -47,9 +46,5 @@ mod tests {
             ..ProgressEntryActiveModel::new()
         }.insert(db).await.unwrap();
     }
-    #[tokio::test]
-    async fn connect_database () {
-        let db = get_or_try_init_test_database().await.unwrap();
-        assert!(db.ping().await.is_ok());
-    }
+
 }
