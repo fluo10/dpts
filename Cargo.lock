@@ -2241,19 +2241,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "progress-pile-cli"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "chrono-tz",
- "clap",
- "progress-pile-client",
- "thiserror 2.0.12",
- "tokio",
- "toml",
-]
-
-[[package]]
 name = "progress-pile-client"
 version = "0.1.0"
 dependencies = [
