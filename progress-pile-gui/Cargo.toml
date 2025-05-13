@@ -1,0 +1,15 @@
+[package]
+name = "progress-pile-gui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+web = ["progress-pile-client/web", "dep:wasm-bindgen" ]
+desktop = ["progress-pile-client/desktop"]
+
+[dependencies]
+bevy = { version = "0.16.0", default-features = false }
+progress-pile-client.workspace = true
+wasm-bindgen = { version = "0.2.100", optional = true }
