@@ -1,14 +1,8 @@
+#[cfg(any(feature="sqlite", feature="postgres"))]
 mod database;
-mod global;
 
+#[cfg(any(feature="sqlite", feature="postgres"))]
 pub use database::{
     DatabaseConfig,
     PartialDatabaseConfig,
-    DATABASE_CONFIG,
-};
-
-pub use global::{
-    GlobalConfig,
-    PartialGlobalConfig,
-    GLOBAL_CONFIG,
 };

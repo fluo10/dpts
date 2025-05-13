@@ -6,14 +6,16 @@ license.workspace = true
 repository.workspace = true
 
 [features]
-default = ["clap",]
-clap = ["dep:clap"]
-postgres = ["sea-orm/sqlx-postgres", "sea-orm/sqlx-postgres"]
-server = ["clap", "postgres"]
+default = ["desktop", "server"]
+cli = ["dep:clap"]
+desktop = ["cli", "sqlite", "fs"]
+fs = []
+sqlite = ["dep:sea-orm"]
+postgres = ["sea-orm/sqlx-postgres"]
+server = ["cli", "sqlite", "postgres", "fs"]
 
 [dependencies]
 async-graphql.workspace = true
-axum = "0.8"
 chrono = {workspace = true}
 chrono-tz.workspace = true
 clap = { workspace = true, optional = true }
@@ -22,9 +24,9 @@ cynic = "3.10.0"
 dotenv = {workspace = true}
 iana-time-zone = "0.1.63"
 log = "0.4.27"
-sea-orm.workspace = true
-sea-orm-migration.workspace = true
+sea-orm = { workspace = true, optional = true }
 serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 toml.workspace = true
+

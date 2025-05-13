@@ -4,18 +4,18 @@ version = "0.1.0"
 edition = "2024"
 
 [features]
-default = ["clap"]
-clap = ["dep:clap"]
+default = ["desktop"]
+desktop = ["dep:clap", "progress-pile-core/desktop", "dep:progress-pile-migration", "dep:sea-orm", "tokio/io-util", "tokio/fs"]
+wasm = []
 
 [dependencies]
-async-graphql.workspace = true
 chrono.workspace = true
 chrono-tz.workspace = true
 clap = { workspace = true, optional = true }
 dirs.workspace = true
 progress-pile-core.workspace = true
-progress-pile-migration = { workspace = true, features = ["client"]}
-sea-orm.workspace = true
+progress-pile-migration = { workspace = true, features = ["client"], optional = true}
+sea-orm = { workspace = true, optional = true }
 serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true

@@ -2257,7 +2257,6 @@ dependencies = [
 name = "progress-pile-client"
 version = "0.1.0"
 dependencies = [
- "async-graphql",
  "chrono",
  "chrono-tz",
  "clap",
@@ -2278,7 +2277,6 @@ name = "progress-pile-core"
 version = "0.1.0"
 dependencies = [
  "async-graphql",
- "axum",
  "chrono",
  "chrono-tz",
  "clap",
@@ -2288,7 +2286,6 @@ dependencies = [
  "iana-time-zone",
  "log",
  "sea-orm",
- "sea-orm-migration",
  "serde",
  "thiserror 2.0.12",
  "tokio",
