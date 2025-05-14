@@ -6,13 +6,9 @@ license.workspace = true
 repository.workspace = true
 
 [features]
-default = ["desktop", "server"]
-cli = ["dep:clap"]
-desktop = ["cli", "sqlite", "fs"]
-fs = []
-sqlite = ["dep:sea-orm"]
-postgres = ["sea-orm/sqlx-postgres"]
-server = ["cli", "sqlite", "postgres", "fs"]
+default = ["desktop"]
+desktop = ["dep:clap", "dep:sea-orm"]
+wasm = []
 
 [dependencies]
 async-graphql.workspace = true

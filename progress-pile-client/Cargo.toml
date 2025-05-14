@@ -6,7 +6,7 @@ edition = "2024"
 [features]
 default = ["desktop"]
 desktop = ["dep:clap", "progress-pile-core/desktop", "dep:progress-pile-migration", "dep:sea-orm", "tokio/io-util", "tokio/fs"]
-web = []
+web = ["uuid/js"]
 
 [dependencies]
 chrono.workspace = true
@@ -22,5 +22,5 @@ tokio.workspace = true
 toml.workspace = true
 uuid.workspace = true
 
-[dev-dependencies]
+[target.'cfg(not(target_family="wasm"))'.dev-dependencies]
 tempfile.workspace = true

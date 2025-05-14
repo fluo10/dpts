@@ -20,7 +20,7 @@ pub enum Error {
     InitializingOnceCell(String),
     #[error("Once cell is already Initialized: {0}")]
     AlreadyInitializedOnceCell(String),
-    #[cfg(any(feature="postgres", feature="sqlite"))]
+    #[cfg(feature="desktop")]
     #[error("DB Error: {0}")]
     Db(#[from]sea_orm::DbErr),
 }

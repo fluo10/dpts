@@ -2,7 +2,6 @@ mod remote;
 
 use std::{fmt::{Display, Formatter}, path::{Path, PathBuf}, str::FromStr};
 
-pub use progress_pile_core::config::*;
 pub use remote::*;
 
 use crate::error::Error;

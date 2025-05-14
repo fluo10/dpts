@@ -1,6 +1,5 @@
 use std::time::Duration;
 
-#[cfg(feature="cli")]
 use clap::Args;
 use sea_orm::ConnectOptions;
 use serde::Deserialize;
@@ -63,23 +62,26 @@ impl TryFrom<PartialDatabaseConfig> for DatabaseConfig{
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[cfg_attr(feature="cli", derive(Args))]
+#[derive(Args)]
 pub struct PartialDatabaseConfig {
+    #[arg(long)]
     pub url: Option<String>,
+    #[arg(long)]
     pub max_connections: Option<u32>,
+    #[arg(long)]
     pub min_connections: Option<u32>,
-    #[cfg_attr(feature="cli", arg(value_parser = parse_duration ))]
+    #[arg(long, value_parser = parse_duration )]
     pub connect_timeout: Option<Duration>,
-    #[cfg_attr(feature="cli", arg(value_parser = parse_duration ))]
+    #[arg(long, value_parser = parse_duration )]
     pub acquire_timeout: Option<Duration>,
-    #[cfg_attr(feature="cli", arg(value_parser = parse_duration ))]
+    #[arg(long, value_parser = parse_duration )]
     pub idle_timeout: Option<Duration>,
-    #[cfg_attr(feature="cli", arg(value_parser = parse_duration ))]
+    #[arg(long, value_parser = parse_duration )]
     pub max_lifetime: Option<Duration>,
+    #[arg(long)]
     pub sqlx_logging: Option<bool>
 }
 
-#[cfg(feature="cli")]
 fn parse_duration(arg: &str) -> Result<std::time::Duration, Error> {
     let seconds = arg.parse()?;
     Ok(std::time::Duration::from_secs(seconds))

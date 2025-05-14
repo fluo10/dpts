@@ -1,12 +1,12 @@
-mod args;
-mod auth;
-mod config;
+pub mod cli;
+pub mod auth;
+pub mod config;
 pub mod entity;
 pub mod global;
 pub mod graphql;
 pub use progress_pile_core::error;
 
-pub use args::Args;
+pub use cli::Cli;
 use async_graphql::{EmptySubscription, Schema};
 use async_graphql_axum::{
     GraphQL,

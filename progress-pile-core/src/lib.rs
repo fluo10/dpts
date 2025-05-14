@@ -1,4 +1,3 @@
-pub mod config;
 pub mod csv;
 pub mod entity;
 pub mod error;

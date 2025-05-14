@@ -1,9 +1,8 @@
 mod config;
-
-#[cfg(any(feature="sqlite", feature="postgres"))]
+#[cfg(feature="desktop")]
 mod database;
 
 pub use config::GlobalConfig;
 
-#[cfg(any(feature="sqlite", feature="postgres"))]
+#[cfg(feature="desktop")]
 pub use database::GlobalDatabase;

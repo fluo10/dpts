@@ -1,7 +1,7 @@
 use async_graphql::{http::{playground_source, GraphQLPlaygroundConfig}, *};
 use async_graphql_axum::GraphQL;
 
-use progress_pile_server::{build_app, Args};
+use progress_pile_server::{build_app, cli::Cli};
 use axum::{response::{Html, IntoResponse}, routing::get, Router};
 use clap::Parser;
 
