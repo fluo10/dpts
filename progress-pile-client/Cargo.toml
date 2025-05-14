@@ -5,7 +5,7 @@ edition = "2024"
 
 [features]
 default = ["desktop"]
-desktop = ["dep:clap", "progress-pile-core/desktop", "dep:progress-pile-migration", "dep:sea-orm", "tokio/io-util", "tokio/fs"]
+desktop = ["dep:clap", "progress-pile-core/desktop", "dep:progress-pile-migration-client", "dep:sea-orm", "tokio/io-util", "tokio/fs"]
 web = ["uuid/js"]
 
 [dependencies]
@@ -14,7 +14,7 @@ chrono-tz.workspace = true
 clap = { workspace = true, optional = true }
 dirs.workspace = true
 progress-pile-core.workspace = true
-progress-pile-migration = { workspace = true, features = ["client"], optional = true}
+progress-pile-migration-client = { workspace = true, optional = true}
 sea-orm = { workspace = true, optional = true }
 serde.workspace = true
 thiserror.workspace = true

@@ -24,7 +24,6 @@ mod tests {
     use chrono::Local;
     use progress_pile_core::global::GlobalDatabase;
     use sea_orm::{entity::*, ConnectOptions, Database, DatabaseConnection};
-    use progress_pile_migration::{ClientMigrator, MigratorTrait};
     use uuid::Uuid;
     use crate::error::Error;
     use crate::global::GLOBAL;

@@ -10,8 +10,8 @@ argon2 = "0.5.3"
 async-graphql.workspace = true
 axum = "0.8.4"
 clap = {workspace = true, features = ["derive"]}
-progress-pile-core = {workspace = true}
-progress-pile-migration = { workspace = true, features = ["server"] }
+progress-pile-core = {workspace = true, features = ["desktop"]}
+progress-pile-migration-server.workspace = true
 chrono = {workspace = true}
 sea-orm = { workspace = true, features = ["sqlx-postgres"] }
 serde.workspace = true

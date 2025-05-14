@@ -1,4 +1,4 @@
-use progress_pile_migration::{ServerMigrator, MigratorTrait};
+use progress_pile_migration_server::{Migrator, MigratorTrait};
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use crate::error::Error;
 use tokio::sync::OnceCell;
@@ -19,7 +19,7 @@ impl GlobalDatabase for Global {
     {
         Ok(self.database.get_or_try_init(|| async {
             let db = Database::connect(options).await?;
-            ServerMigrator::up(&db, None).await?;
+            Migrator::up(&db, None).await?;
             Ok::<DatabaseConnection, Error>(db)
         }).await?)
     }

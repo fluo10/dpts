@@ -45,7 +45,6 @@ mod tests {
     use std::time::Duration;
     use chrono::{offset, FixedOffset, Local, TimeZone};
     use sea_orm::{entity::*, query::*, ConnectOptions, Database};
-    use progress_pile_migration::{ServerMigrator, MigratorTrait};
     use crate::{entity::*, global::GLOBAL};
 
     #[tokio::test]
