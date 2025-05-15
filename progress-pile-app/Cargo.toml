@@ -9,5 +9,5 @@ repository.workspace = true
 desktop = ["progress-pile-client/desktop"]
 
 [dependencies]
-bevy = { version = "0.16.0", default-features = false }
+bevy.version = "0.16.0"
 progress-pile-client.workspace = true
