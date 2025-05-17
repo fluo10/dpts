@@ -1,12 +1,13 @@
 mod plugins;
+pub mod themes;
 
 use bevy::prelude::*;
 
 #[derive(Clone, Copy, Default, Eq, PartialEq, Debug, Hash, States)]
 enum AppState {
-    #[default]
     MainView,
-    Setting,
+    #[default]
+    Menu,
     List,
     Graph
 }
@@ -38,4 +39,13 @@ fn main() {
         .add_plugins(((plugins::main_menu::menu_plugin, plugins::main_view::main_view_plugin)))
         .run();
 
+}
+
+
+
+// Generic system that takes a component as a parameter, and will despawn all entities with that component
+fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands) {
+    for entity in &to_despawn {
+        commands.entity(entity).despawn();
+    }
 }
