@@ -5,8 +5,9 @@ use bevy::prelude::*;
 
 #[derive(Clone, Copy, Default, Eq, PartialEq, Debug, Hash, States)]
 enum AppState {
-    MainView,
     #[default]
+    Loading,
+    MainView,
     Menu,
     List,
     Graph
@@ -36,9 +37,13 @@ fn main() {
         .insert_resource(ViewerMode::PokerTip2D)
         .init_state::<AppState>()
         .add_systems(Startup, setup)
-        .add_plugins(((plugins::main_menu::menu_plugin, plugins::main_view::main_view_plugin)))
+        .add_plugins((plugins::loading::loading_plugin, plugins::main_menu::menu_plugin, plugins::main_view::main_view_plugin))
         .run();
 
+}
+
+fn setup(mut commands: Commands) {
+    commands.spawn(Camera2d);
 }
 
 
